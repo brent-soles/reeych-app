@@ -1,0 +1,19 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "reeych backend: express/graphQL",
+  "main": "index.js",
+  "author": "Brent Soles",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "apollo-server-koa": "^2.3.1",
+    "graphql": "^14.0.2",
+    "koa": "^2.6.2",
+    "koa-helmet": "^4.0.0",
+    "nodemon": "^1.18.9"
+  },
+  "scripts": {
+      "dev": "nodemon index.js"
+  }
+}

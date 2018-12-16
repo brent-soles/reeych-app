@@ -8,15 +8,29 @@ module.exports = gql`
         spaces: [Space]
     }
 
+    type Mutation {
+        space(id: ID, name: String): Space,
+        card(id: ID!, title: String, author: String, description: String): Card
+    }
+
     """
         TypeDefs for unique/composite types
+        
     """
     type Card {
         id: ID!
+        belongsTo: ID!
         title: String!
         author: String!
         description: String!
+        meta: CardMeta
+    }
+
+    type CardMeta {
         belongsTo: ID!
+        details: String
+        questions: String
+        notes: String
     }
 
     type Space {

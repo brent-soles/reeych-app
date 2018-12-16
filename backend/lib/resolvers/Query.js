@@ -1,4 +1,4 @@
-const { cards, spaces } = require('./mockData');
+const { cards, spaces, meta } = require('./mockData');
 
 /** Returns a single card
  * 
@@ -10,7 +10,6 @@ const { cards, spaces } = require('./mockData');
 const card = (parent, args, context, info) => {
     let card = cards.filter((card) => {
         if (card.id.toString() === args.id){
-            
             return card;
         }
     })[0];

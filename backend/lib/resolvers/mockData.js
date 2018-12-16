@@ -1,10 +1,29 @@
+const meta = [
+    {
+        belongsTo: 0,
+        details: "Meeting at X at Y PM",
+        questions: "1. lasjf;laksdf;?\n2.fasdfasdfasf\n\ta.)fasdfasdf?",
+        notes: "* LOLOL\n* Hello"
+    },
+    {
+        belongsTo: 2,
+        details: "Meeting at A at B PM",
+        questions: "1. lasjf;laksdf;?\n2.fasdfasdfasf\n\ta.)fasdfasdf?",
+        notes: "* LOLOL\n* Hello"
+    }
+
+]
+
+
 const cards = [
     {
         id: 0,
+        belongsTo: 12,
         title: "New",
         author: "Brent",
         description: "desc",
-        belongsTo: 12
+        
+        meta: meta[0]
     },
     {
         id: 3,
@@ -22,10 +41,11 @@ const cards = [
     },
     {
         id: 2,
+        belongsTo: 13,
         title: "New2",
         author: "Brent2",
         description: "desc2",
-        belongsTo: 13
+        meta: meta[1],
     }
 ]
 
@@ -45,7 +65,9 @@ const spaces = [
 ]
 
 
+
 module.exports = {
     cards,
-    spaces
+    spaces,
+    meta
 }

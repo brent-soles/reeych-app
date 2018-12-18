@@ -24,14 +24,16 @@ const card = (parent, args, context, info) => {
  * @param {*} context 
  * @param {*} info 
  */
-const space = (parent, args, context, info) => {
-    let spc = spaces.filter((s) => {
-        if(s.id.toString() == args.id){
-            return s;
-        }
-    })[0];
-
-    return spc;
+const space = async (parent, args, context, info) => {
+    const { Spaces } = context.db;
+    const { id } = args;
+    try {
+        const spc = await Spaces.findById(id);
+        return spc;
+    } catch(err) {
+        console.log(err);
+    }
+    return null;
 }
 
 

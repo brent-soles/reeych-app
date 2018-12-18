@@ -1,7 +1,6 @@
 const { Schema } = require('mongoose');
 
 const spacesSchema = {
-    _id: Schema.Types.ObjectId,
     name: String,
     numCards: Number,
     cards: [{

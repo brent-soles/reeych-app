@@ -9,7 +9,7 @@ module.exports = gql`
     }
 
     type Mutation {
-        space(id: ID, name: String): Space,
+        createSpace(id: ID, name: String): Space,
         card(id: ID!, title: String, author: String, description: String): Card
     }
 

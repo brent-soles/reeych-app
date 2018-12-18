@@ -1,17 +1,22 @@
 let { cards, spaces, meta } = require('./mockData');
 
-const space = (parent, args, context, info) => {
-    let newSpace;
-    
-    spaces.forEach((s) => {
-        if(s.id.toString() == args.id){
-            s.space = args.name;
-            newSpace = s;
-            return;
-        }
+const createSpace = async (parent, args, context, info) => {
+    const { Spaces } = context.db;
+    console.log(args)
+    const space = new Spaces({
+        ...args,
+        numCards: 0,
+        cards: [],
+        meta: {}
     });
 
-    return newSpace;
+    try {
+        await space.save();
+    } catch (err) {
+        console.log(err)
+    }
+
+    return space;
 }
 
 const card = (parent, args, context, info) => {
@@ -32,7 +37,7 @@ const card = (parent, args, context, info) => {
 
 module.exports = {
     Mutation: {
-        space,
+        createSpace,
         card
     }
 }

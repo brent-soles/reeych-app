@@ -25,7 +25,7 @@ const dbconfig = {
     models
 }
 
-/** Inits db, and adds models to context */
+/** Inits db, and adds models to db object */
 const db = dao.connect(dbconfig);
 dao.initSchema(dbconfig, db);
 

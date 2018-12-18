@@ -35,9 +35,9 @@ module.exports = gql`
 
     type Space {
         id: ID!,
-        space: String,
+        name: String,
         numCards: Int,
-        spaceCards: [Card]
+        cards: [Card]
     }
 
 `;

@@ -18,7 +18,6 @@ const card = (parent, args, context, info) => {
     let newCard;
     cards.forEach((c) => {
         if(c.id.toString() == args.id){
-            console.log("ID")
             for(key in args){
                 if(key !== 'id'){
                     c[key] = args[key];

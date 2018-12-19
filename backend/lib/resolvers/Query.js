@@ -25,10 +25,11 @@ const card = (parent, args, context, info) => {
  * @param {*} info 
  */
 const space = async (parent, args, context, info) => {
-    const { Spaces } = context.db;
+    const { Spaces, Cards } = context.db;
     const { id } = args;
     try {
-        const spc = await Spaces.findById(id);
+        let spc = await Spaces.findById(id);
+        spc.cards = await Cards.find({belongsTo: id});
         return spc;
     } catch(err) {
         console.log(err);
@@ -36,12 +37,10 @@ const space = async (parent, args, context, info) => {
     return null;
 }
 
-
 module.exports = {
     Query: {
         card,
         cards: () => cards,
-        space,
-        spaces: () => spaces
+        space
     }
 }

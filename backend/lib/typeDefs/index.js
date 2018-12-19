@@ -1,18 +1,7 @@
 const { gql } = require('apollo-server-koa');
 
 module.exports = gql`
-    type Query {
-        cards: [Card],
-        card(id: ID, spaceId: ID): Card,
-        space(id: ID): Space,
-        spaces: [Space]
-    }
-
-    type Mutation {
-        createSpace(id: ID, name: String): Space,
-        card(id: ID!, title: String, author: String, description: String): Card
-    }
-
+    
     """
         TypeDefs for unique/composite types
         
@@ -27,7 +16,6 @@ module.exports = gql`
     }
 
     type CardMeta {
-        belongsTo: ID!
         details: String
         questions: String
         notes: String
@@ -39,5 +27,32 @@ module.exports = gql`
         numCards: Int,
         cards: [Card]
     }
+
+    """
+        Unique input types
+    """
+    input CardMetaData {
+        details: String
+        questions: String
+        notes: String
+    }
+    
+    """
+        CRUD Types
+    """
+
+    type Query {
+        cards: [Card],
+        card(id: ID, spaceId: ID): Card,
+        space(id: ID): Space,
+        spaces: [Space]
+    }
+
+    type Mutation {
+        createSpace(name: String): Space,
+        createCard(belongsTo: ID!, title: String!, author: String!, description: String!, meta: CardMetaData): Card
+    }
+
+    
 
 `;

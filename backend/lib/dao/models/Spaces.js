@@ -1,10 +1,9 @@
 const { Schema } = require('mongoose');
-const { cardsSchema } = require('./Cards');
 
 const spacesSchema = {
     name: String,
     numCards: Number,
-    cards: [cardsSchema]
+    cards: [Schema.Types.ObjectId]
 }
 
 module.exports = {

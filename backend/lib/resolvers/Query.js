@@ -1,4 +1,4 @@
-const { cards, spaces, meta } = require('./mockData');
+//const { cards, spaces, meta } = require('./mockData');
 
 /** Returns a single card
  * 
@@ -7,15 +7,36 @@ const { cards, spaces, meta } = require('./mockData');
  * @param {*} context 
  * @param {*} info 
  */
-const card = (parent, args, context, info) => {
-    let card = cards.filter((card) => {
-        if (card.id.toString() === args.id){
-            return card;
-        }
-    })[0];
-    return card;
+const card = async (parent, args, context, info) => {
+    const { Cards } = context.db;
+    const { id } = args;
+    try{
+        const card = await Cards.findById(id);
+        return card;
+    } catch(err) {
+        console.log(err)
+    }
+    return null;
 }
 
+const cards = async (parent, args, context, info) => {
+    const { Spaces, Cards } = context.db;
+    const { id } = args;
+    try {
+        // Grabs cards and number of cards for data
+        const allCards = await Spaces.findById(id, 'cards');
+        //TODO: Push computation to db
+        let result = [];
+        for(let card of allCards.cards){
+            result.push(await Cards.findById(card._id));
+        }
+        return result;
+    } catch(err) {
+        console.log(err);
+    }
+
+    return null;
+}
 
 /** Returns a single space
  * 
@@ -29,7 +50,7 @@ const space = async (parent, args, context, info) => {
     const { id } = args;
     try {
         let spc = await Spaces.findById(id);
-        spc.cards = await Cards.find({belongsTo: id});
+
         return spc;
     } catch(err) {
         console.log(err);
@@ -40,7 +61,7 @@ const space = async (parent, args, context, info) => {
 module.exports = {
     Query: {
         card,
-        cards: () => cards,
+        cards,
         space
     }
 }

@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 /** Config */
-const connect =  ({ url, models }) => {
+const connect = ({ url, models }) => {
     //If neither, we have a problem
     if( !url || !models ) {
         return null;

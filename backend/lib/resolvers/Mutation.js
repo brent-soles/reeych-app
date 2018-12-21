@@ -1,5 +1,3 @@
-let { cards, spaces, meta } = require('./mockData');
-
 
 /**
  * 
@@ -12,20 +10,20 @@ let { cards, spaces, meta } = require('./mockData');
  */
 const createSpace = async (parent, args, context, info) => {
     const { Spaces } = context.db; //grabs model from db context
-    let { name } = args;
+    const { name } = args;
     const space = new Spaces({
-        name: name.toLowerCase(),
-        numCards: 0,
-        cards: []
-    });
+            name: name.toLowerCase(),
+            numCards: 0,
+            cards: []
+        });
 
     try {
         await space.save();
-    } catch (err) {
-        console.log(err);
+        return space;
+    } catch(err) {
+        // Bubbles up to caller
+        throw err; 
     }
-
-    return space;
 }
 
 /**
@@ -66,11 +64,22 @@ const createCard = async (parent, args, context, info) => {
         result.belongsTo = result.belongsTo.valueOf();
         return result;
     } catch(err){
-        console.log(err);
+        throw err;
     }
-    
-    return null;
 }
+
+const updateCard = async (parent, args, context, info) => {
+    const { Cards } = context.db;
+    const { id } = args;
+    // TODO: Data validation
+    try {
+        const card = await Cards.findByIdAndUpdate(id, {...args});
+        return card;
+    } catch (err) {
+        throw err;
+    }
+}
+
 
 /**
  * 
@@ -101,9 +110,8 @@ const deleteCard = async (parent, args, context, info) => {
         card.belongsTo = card.belongsTo.valueOf();
         return card;
     } catch(err){
-        console.log(err);
+        throw err;
     }
-    return null;
 }
 
 module.exports = {

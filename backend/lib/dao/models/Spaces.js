@@ -6,7 +6,13 @@ const spacesSchema = {
     cards: [Schema.Types.ObjectId]
 }
 
+const Spaces = new Schema(spacesSchema);
+
+/** DAO Wrappers */
+/** methods wrapped in try/catch blocks at resolver layer */
+
+
 module.exports = {
-    Spaces: new Schema(spacesSchema),
+    Spaces,
     spacesSchema
 }

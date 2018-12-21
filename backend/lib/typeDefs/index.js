@@ -42,15 +42,16 @@ module.exports = gql`
     """
 
     type Query {
-        cards(id: ID!): [Card],
-        card(id: ID!, spaceId: ID): Card,
-        space(id: ID): Space,
+        cards(id: ID!): [Card]
+        card(id: ID!, spaceId: ID): Card
+        space(id: ID): Space
         spaces: [Space]
     }
 
     type Mutation {
-        createSpace(name: String): Space,
+        createSpace(name: String): Space
         createCard(belongsTo: ID!, title: String!, author: String!, description: String!, meta: CardMetaData): Card
+        updateCard(id: ID!): Card
         deleteCard(id: ID!): Card
     }
 

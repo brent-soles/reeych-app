@@ -13,9 +13,10 @@ const cardsSchema = {
     }
 }
 
+const Cards = new Schema(cardsSchema);
+
 // Don't need to include ID
 module.exports = { 
-    Cards: new Schema(cardsSchema),
+    Cards,
     cardsSchema
 }
-//module.exports.cardsSchema = cardsSchema;

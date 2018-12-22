@@ -1,34 +1,50 @@
 
 /**
  * 
- * @param {*} parent 
+ * @param {*} _ 
  * @param {*} args => {
  *      name: String
  * }, only the name should be accept, everything else vanilla
- * @param {*} context 
+ * @param {*} ctx 
  * @param {*} info 
  */
-const createSpace = async (parent, args, context, info) => {
-    const { Spaces } = context.db; //grabs model from db context
-    const { name } = args;
-    const space = new Spaces({
-            name: name.toLowerCase(),
-            numCards: 0,
-            cards: []
-        });
-
-    try {
-        await space.save();
+const createSpace = async (_, args, ctx, info) => {
+    const { SpacesDAO } = ctx.DAO; //grabs DAO from db ctx
+    try{
+        const space = await SpacesDAO.createSpace(args);
         return space;
     } catch(err) {
-        // Bubbles up to caller
-        throw err; 
+        console.log(`createSpace: ${err}`);
+    }
+
+}
+
+const updateSpace = async (_, args, ctx, info) => {
+    const { SpacesDAO } = ctx.DAO;
+    try {
+        const space = SpacesDAO.updateSpace(args);
+        return space;
+    } catch(err) {
+        console.log(`updateSpace: ${err}`);
+    }
+}
+
+const deleteSpace = async (_, args, ctx, info) => {
+    const { SpacesDAO, CardsDAO } = ctx.DAO;
+    try {
+        const space = await SpacesDAO.deleteSpace(args);
+        space.cards.forEach(cardId => {
+            CardsDAO.delete({ id: cardId })
+        })
+        return space;
+    } catch (err) {
+        console.log(err);
     }
 }
 
 /**
  * 
- * @param {*} parent 
+ * @param {*} _ 
  * @param {*} args => {
  *      _belongsTo: ID, // Card belongs to a Space (this is a space ID)
  *      title: String,
@@ -41,39 +57,34 @@ const createSpace = async (parent, args, context, info) => {
  *      } // Object w/ diff values
  *      
  * }
- * @param {*} context => holds db context
+ * @param {*} ctx => holds db ctx
  * @param {*} info 
  */
-const createCard = async (parent, args, context, info) => {
-    const { Spaces, Cards } = context.db; //grabs model from db context
+const createCard = async (_, args, ctx, info) => {
+    //const { Spaces, Cards } = ctx.DAO; //grabs model from db ctx
+    const { SpacesDAO, CardsDAO } = ctx.DAO;
     //TODO: Write validation
     //Assume user is perfect... for now...
-    const card = await new Cards({...args});
     try {
-        const result = await card.save();
-        await Spaces.findByIdAndUpdate(args.belongsTo.valueOf(),
-            {
-                $inc: {
-                    numCards: 1
-                },
-                $push: {
-                    cards: card._id
-                }
-            }
-        )
-        result.belongsTo = result.belongsTo.valueOf();
-        return result;
+        const card = await CardsDAO.create(args);
+        // Make belongsTo readable
+        card.belongsTo = card.belongsTo.valueOf();
+        await SpacesDAO.addCard({
+            spaceId: card.belongsTo,
+            cardId: card._id
+        })
+
+        return card;
     } catch(err){
         throw err;
     }
 }
 
-const updateCard = async (parent, args, context, info) => {
-    const { Cards } = context.db;
-    const { id } = args;
+const updateCard = async (_, args, ctx, info) => {
+    const { CardsDAO } = ctx.DAO;
     // TODO: Data validation
     try {
-        const card = await Cards.findByIdAndUpdate(id, {...args});
+        const card = await CardsDAO.update(args);
         return card;
     } catch (err) {
         throw err;
@@ -83,31 +94,24 @@ const updateCard = async (parent, args, context, info) => {
 
 /**
  * 
- * @param {*} parent 
+ * @param {*} _ 
  * @param {*} args => {
  *      id, // Card belongs to a Space (this is a space ID)
  * }
- * @param {*} context => holds db context
+ * @param {*} ctx => holds db ctx
  * @param {*} info 
  */
-const deleteCard = async (parent, args, context, info) => {
-    const { Spaces, Cards } = context.db; //grabs model from db context
+const deleteCard = async (_, args, ctx, info) => {
+    const { SpacesDAO, CardsDAO } = ctx.DAO; //grabs model from db ctx
     //TODO: Write validation
     //Assume user is perfect... for now...
-    const { id } = args;
     try {
-        const card = await Cards.findByIdAndDelete(id);
-        await Spaces.findByIdAndUpdate(card.belongsTo.valueOf(),
-            {
-                $inc: {
-                    numCards: -1
-                },
-                $pull: {
-                    cards: card._id
-                }
-            }
-        )
+        const card = await CardsDAO.delete(args);
         card.belongsTo = card.belongsTo.valueOf();
+        await SpacesDAO.deleteCard({
+            spaceId: card.belongsTo,
+            cardId: card._id
+        });
         return card;
     } catch(err){
         throw err;
@@ -117,7 +121,10 @@ const deleteCard = async (parent, args, context, info) => {
 module.exports = {
     Mutation: {
         createSpace,
+        updateSpace,
+        deleteSpace,
         createCard,
+        updateCard,
         deleteCard
     }
 }

@@ -1,6 +1,6 @@
 const { Types } = require('mongoose');
-const { Spaces } = require('./Spaces');
-const { Cards } = require('./Cards');
+const { SpacesDAO } = require('./Spaces');
+const { CardsDAO } = require('./Cards');
 
 /**
  * For interoperability with MongoDB ID's
@@ -13,12 +13,12 @@ ObjectId.prototype.valueOf = function() {
 module.exports = {
     models: [
         {
-            name: "Spaces",
-            schema: Spaces
+            name: "SpacesDAO",
+            daoObj: SpacesDAO
         },
         {
-            name: "Cards",
-            schema: Cards
+            name: "CardsDAO",
+            daoObj: CardsDAO
         }
     ]
 }

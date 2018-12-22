@@ -4,7 +4,7 @@ require('dotenv').config({path: './dev.server.env'})
 /** Server defs */
 const Koa = require('koa');
 const app = new Koa();
-const { ApolloServer, gql } = require('apollo-server-koa');
+const { ApolloServer} = require('apollo-server-koa');
 
 /** Typedefs/Resolver Imports */
 const resolvers = require('./lib/resolvers');
@@ -26,14 +26,13 @@ const dbconfig = {
 }
 
 /** Inits db, and adds models to db object */
-const db = dao.connect(dbconfig);
-dao.initSchema(dbconfig, db);
+dao.connect(dbconfig);
 
 /** Server initialization */
 const server = new ApolloServer({ 
     typeDefs, 
     resolvers,
-    context: async () => ({ db }) //Adds db to context
+    context: async () => ({ DAO: dao.initSchema(dbconfig)}) //Adds db to context
 });
 server.applyMiddleware({ app });
 

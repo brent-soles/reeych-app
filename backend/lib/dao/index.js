@@ -18,12 +18,15 @@ const connect = ({ url, models }) => {
 
 }
 
-const initSchema = ({ models }, appCtx) => {
+const initSchema = ({ models }) => {
     try{
-        for(sch in models){
-            const {name, schema} = models[sch]
-            appCtx[name] = mongoose.model(name, schema);
+        let dao = {};
+        for(let obj of models){
+            const { name, daoObj } = obj;
+            // Better way to name 
+            dao[name] = daoObj;
         }
+        return dao;
     } catch (err) {
         console.log(err);
         return false;

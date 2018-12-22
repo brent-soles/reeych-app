@@ -1,17 +1,15 @@
-//const { cards, spaces, meta } = require('./mockData');
 
 /** Returns a single card
  * 
- * @param {*} parent 
+ * @param {*} _ 
  * @param {*} args 
- * @param {*} context 
+ * @param {*} ctx 
  * @param {*} info 
  */
-const card = async (parent, args, context, info) => {
-    const { Cards } = context.db;
-    const { id } = args;
+const card = async (_, args, ctx, info) => {
+    const { CardsDAO } = ctx.DAO;
     try{
-        const card = await Cards.findById(id);
+        const card = await CardsDAO.getCard(args);
         return card;
     } catch(err) {
         console.log(err)
@@ -19,18 +17,13 @@ const card = async (parent, args, context, info) => {
     return null;
 }
 
-const cards = async (parent, args, context, info) => {
-    const { Spaces, Cards } = context.db;
-    const { id } = args;
+const cards = async (_, args, ctx, info) => {
+    const { CardsDAO } = ctx.DAO;
+    
     try {
         // Grabs cards and number of cards for data
-        const allCards = await Spaces.findById(id, 'cards');
-        //TODO: Push computation to db
-        let result = [];
-        for(let card of allCards.cards){
-            result.push(await Cards.findById(card._id));
-        }
-        return result;
+        const cards = await CardsDAO.getAllCards(args);
+        return cards;
     } catch(err) {
         console.log(err);
     }
@@ -40,18 +33,16 @@ const cards = async (parent, args, context, info) => {
 
 /** Returns a single space
  * 
- * @param {*} parent 
+ * @param {*} _ 
  * @param {*} args 
- * @param {*} context 
+ * @param {*} ctx 
  * @param {*} info 
  */
-const space = async (parent, args, context, info) => {
-    const { Spaces, Cards } = context.db;
-    const { id } = args;
+const space = async (_, args, ctx, info) => {
+    const { SpacesDAO } = ctx.DAO;
     try {
-        let spc = await Spaces.findById(id);
-
-        return spc;
+        let space = await SpacesDAO.getSpace(args);
+        return space;
     } catch(err) {
         console.log(err);
     }

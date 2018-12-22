@@ -50,8 +50,10 @@ module.exports = gql`
 
     type Mutation {
         createSpace(name: String): Space
+        updateSpace(id: ID!, name: String!): Space
+        deleteSpace(id: ID!): Space
         createCard(belongsTo: ID!, title: String!, author: String!, description: String!, meta: CardMetaData): Card
-        updateCard(id: ID!): Card
+        updateCard(id: ID!, title: String, author: String, description: String, meta: CardMetaData): Card
         deleteCard(id: ID!): Card
     }
 

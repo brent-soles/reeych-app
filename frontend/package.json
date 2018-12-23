@@ -3,9 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/core": "^10.0.5",
+    "@emotion/styled": "^10.0.5",
     "@reach/router": "^1.2.1",
     "apollo-boost": "^0.1.22",
     "apollo-client": "^2.4.7",
+    "emotion": "^10.0.5",
     "graphql": "^14.0.2",
     "react": "^16.7.0-alpha.2",
     "react-apollo": "^2.3.3",

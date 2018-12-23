@@ -31,7 +31,7 @@ CardsDAO.prototype.create = async function(args) {
 }
 
 // Gets a cards with a specified card ID
-CardsDAO.prototype.getCard = async function({id}){
+CardsDAO.prototype.get = async function({id}){
     try{
         const card = await this.schema.findById(id);
         return card;
@@ -41,7 +41,7 @@ CardsDAO.prototype.getCard = async function({id}){
 }
 
 // Gets all cards for a certain space (Note: Space ID is used, not card)
-CardsDAO.prototype.getAllCards = async function({ id }){
+CardsDAO.prototype.getAll = async function({ id }){
     try {
         const cards = await this.schema.find({ belongsTo: id });
         return cards;
@@ -59,7 +59,7 @@ CardsDAO.prototype.update = async function({ id, ...args}){
     }
 }
 
-CardsDAO.prototype.delete = async function({id, ...args}){
+CardsDAO.prototype.delete = async function({ id }){
     //TODO: Write validation
     //Assume user is perfect... for now...
     try {

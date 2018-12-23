@@ -11,7 +11,7 @@
 const createSpace = async (_, args, ctx, info) => {
     const { SpacesDAO } = ctx.DAO; //grabs DAO from db ctx
     try{
-        const space = await SpacesDAO.createSpace(args);
+        const space = await SpacesDAO.create(args);
         return space;
     } catch(err) {
         console.log(`createSpace: ${err}`);
@@ -22,7 +22,7 @@ const createSpace = async (_, args, ctx, info) => {
 const updateSpace = async (_, args, ctx, info) => {
     const { SpacesDAO } = ctx.DAO;
     try {
-        const space = SpacesDAO.updateSpace(args);
+        const space = SpacesDAO.update(args);
         return space;
     } catch(err) {
         console.log(`updateSpace: ${err}`);
@@ -32,7 +32,7 @@ const updateSpace = async (_, args, ctx, info) => {
 const deleteSpace = async (_, args, ctx, info) => {
     const { SpacesDAO, CardsDAO } = ctx.DAO;
     try {
-        const space = await SpacesDAO.deleteSpace(args);
+        const space = await SpacesDAO.delete(args);
         space.cards.forEach(cardId => {
             CardsDAO.delete({ id: cardId })
         })

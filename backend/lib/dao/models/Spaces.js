@@ -10,7 +10,7 @@ function SpacesDAO() {
     this.schema = model('Spaces', new Schema(spacesSchema));
 }
 
-SpacesDAO.prototype.getSpace = async function({ id }){
+SpacesDAO.prototype.get = async function({ id }){
     try {
         const space = await this.schema.findById(id);
         return space;
@@ -19,7 +19,7 @@ SpacesDAO.prototype.getSpace = async function({ id }){
     }
 }
 
-SpacesDAO.prototype.createSpace = async function({ name }){
+SpacesDAO.prototype.create = async function({ name }){
     //takes name, tried to save to db
     const space = new this.schema({
         name: name.toLowerCase(),
@@ -37,7 +37,7 @@ SpacesDAO.prototype.createSpace = async function({ name }){
 }
 
 
-SpacesDAO.prototype.updateSpace = async function({id, name}){
+SpacesDAO.prototype.update = async function({id, name}){
     try {
         const space = await this.schema.findByIdAndUpdate(id, {name});
         space.name = name;
@@ -47,7 +47,7 @@ SpacesDAO.prototype.updateSpace = async function({id, name}){
     }
 }
 
-SpacesDAO.prototype.deleteSpace = async function({id}){
+SpacesDAO.prototype.delete = async function({id}){
     try {
         const space = await this.schema.findByIdAndDelete(id);
         return space;
@@ -55,6 +55,8 @@ SpacesDAO.prototype.deleteSpace = async function({id}){
         throw err;
     }
 }
+
+/** Card specific operations */
 
 SpacesDAO.prototype.addCard = async function({ spaceId, cardId }){
     try {

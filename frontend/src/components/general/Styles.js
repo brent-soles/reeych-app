@@ -17,9 +17,25 @@ export const CardContainerLayout = styled.div`
 `;
 
 export const CardLayout = styled.div`
+    grid-row: 1;
+    grid-column: 1;
     width: 46rem;
     height: 18rem;
-    margin: 1.5rem auto;
+    margin: 1.5rem;
+    border-radius: 2rem;
+    padding: 2rem;
+    
+    background-color: rgba(255, 255, 255, 1);
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
+`;
+
+export const ExpandedCardLayout = styled.div`
+    grid-row: 1;
+    grid-column: 1;
+    display: ${props => !props.show ? 'block' : 'none'};
+    width: 46rem;
+    height: 60rem;
+    margin: 1.5rem;
     border-radius: 2rem;
     padding: 2rem;
     
@@ -41,4 +57,15 @@ export const H2 = styled.h2`
 export const P = styled.p`
     font-family: Nunito, sans-serif;   
     font-size: 1.8rem;
+`;
+
+
+export const PrimaryButtonStyled = styled.button`
+    background-color: rgba(0, 184, 158, 1);
+    border-radius: .2rem;
+    color: white;
+
+    font-family: Nunito, sans-serif;
+    font-size: 2.4rem;
+    padding: 1rem;
 `;

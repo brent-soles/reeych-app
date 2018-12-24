@@ -25,13 +25,6 @@ const ReeychApp = (props) => {
         <MainDiv>
             <CardContainerLayout>
                 <Card author="Brent" title="TITTTLLLLEEE" date="12/12/12" />
-                <CardLayout />
-                <CardLayout />
-                <CardLayout />
-                <CardLayout />
-                <CardLayout />
-                <CardLayout />
-                <CardLayout />
             </CardContainerLayout>
         </MainDiv>
     )

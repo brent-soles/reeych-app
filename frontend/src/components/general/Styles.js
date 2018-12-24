@@ -38,3 +38,7 @@ export const H2 = styled.h2`
     font-size: 2.4rem;
 `;
 
+export const P = styled.p`
+    font-family: Nunito, sans-serif;   
+    font-size: 1.8rem;
+`;

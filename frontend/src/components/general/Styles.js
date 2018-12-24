@@ -32,13 +32,12 @@ export const CardLayout = styled.div`
 export const ExpandedCardLayout = styled.div`
     grid-row: 1;
     grid-column: 1;
-    display: ${props => !props.show ? 'block' : 'none'};
+    display: ${props => props.show ? 'block' : 'none'};
     width: 46rem;
     height: 60rem;
     margin: 1.5rem;
     border-radius: 2rem;
     padding: 2rem;
-    
     background-color: rgba(255, 255, 255, 1);
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
 `;
@@ -46,6 +45,20 @@ export const ExpandedCardLayout = styled.div`
 export const H1 = styled.h1`
     font-family: Nunito;
     font-size: 3.6rem;
+`;
+
+export const H1Input = styled.input`
+    font-family: Nunito;
+    font-size: 3.6rem;
+    border: none;
+
+    &:hover {
+        background-color: grey;
+    }
+
+    &:focus {
+        bacground-color: darkgrey;
+    }
 `;
 
 export const H2 = styled.h2`

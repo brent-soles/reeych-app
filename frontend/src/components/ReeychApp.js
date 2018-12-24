@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
+import { Query } from 'react-apollo';
+import gql from 'graphql-tag';
 import styled from '@emotion/styled';
+
 
 /**
  * Import user components
@@ -18,34 +21,45 @@ const MainDiv = styled.div`
 
 
 const ReeychApp = (props) => {
+    const { spaceId } = props;
+    const ALL_CARDS = gql`
+        query getCards($id: ID!){
+            cards(id: $id){
+                id,
+                title,
+                author,
+                description,
+                meta {
+                    details,
+                    questions,
+                    notes
+                }
+            }
+        }
+    `;
+    
     const [state, setState] = useState({
-        data: "~shrug~"
+        
     })
 
     return (
         <MainDiv>
-            <CardContainerLayout>
-                <FullCard 
-                    author="Brent" 
-                    title="TITTTLLLLEEE" 
-                    date="12/12/12" 
-                    meta={{
-                        details: "deets",
-                        questions: "ques",
-                        notes: "notes"
-                    }}
-                />
-                <FullCard 
-                    author="Bnert" 
-                    title="TLLEEE" 
-                    date="12/13/12" 
-                    meta={{
-                        details: "asdfasdeets",
-                        questions: "ques",
-                        notes: "notes"
-                    }}
-                />
-            </CardContainerLayout>
+            <Query query={ALL_CARDS} variables={{id: spaceId}}>    
+                {({ data, loading, error }) => {
+                    if (loading) return <h1>Loading...</h1>
+                    if (error) return <h1>{error}</h1>
+                    const { cards } = data;
+                    console.log(cards);
+                    return ( 
+                        <CardContainerLayout>
+                        {    cards.map((card, index) => {
+                                return <FullCard key={index} {...card} />
+                            })
+                        }
+                        </CardContainerLayout>
+                    )
+                }}
+            </Query>
         </MainDiv>
     )
 }

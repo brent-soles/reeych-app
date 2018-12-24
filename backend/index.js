@@ -5,7 +5,6 @@ require('dotenv').config({path: './dev.server.env'})
 const Koa = require('koa');
 const app = new Koa();
 const { ApolloServer} = require('apollo-server-koa');
-const subdomain = require('koa2-subdomain');
 
 /** Typedefs/Resolver Imports */
 const resolvers = require('./lib/resolvers');
@@ -17,9 +16,6 @@ const bodyParser = require('koa-bodyparser');
 
 app.use(bodyParser());
 app.use(helmet());
-app.use(subdomain('api', () => {
-    next();
-}));
 
 /** DB Connection */
 const dao = require('./lib/dao');
@@ -42,5 +38,5 @@ server.applyMiddleware({ app });
 
 /** Let the serving... begin! */
 app.listen({ port: 7000 }, () => {
-    console.log(`Server ready at http://localhost:4000${server.graphqlPath}`);
+    console.log(`Server ready at http://localhost:7000${server.graphqlPath}`);
 });

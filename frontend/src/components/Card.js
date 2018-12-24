@@ -1,18 +1,50 @@
 import React, { useState } from 'react';
 import BtnRender from './general/Buttons';
 import { PrimaryButtonStyled } from './general/Styles';
-import { CardLayout, ExpandedCardLayout, H1, H2, P } from './general/Styles';
+import { CardLayout, ExpandedCardLayout, H1, H2, P, H1Input } from './general/Styles';
 import styled from '@emotion/styled';
+import gql from 'graphql-tag';
 
-const Card = (props) => (
+
+
+
+const Card = ({title, author, date, meta, ...props}) => {
+    
+    const [formData, setData] = useState({
+        title,
+        author,
+        date,
+    })
+
+    return (
     <CardLayout id={`${props.id}`}>
-        <H1>{props.title}</H1>
+        <H1Input 
+        name="title" 
+        type="text" 
+        value={formData.title}
+        onChange={(e) => {
+            e.preventDefault();
+            setData({
+                ...formData,
+                title: e.target.value
+            });
+        }}
+        onBlur={(e) => {
+            console.log("U{PDTEA")
+            console.log(e.target.value);
+            console.log(e.target.parentElement.id);
+            console.log({...formData});
+        }}
+        />
+        
         <img src="/051-user.svg" style={{display: "inline-block"}} width="40px" height="40px"></img>
-        <span style={{display: "inline-block"}}><H2>{props.author} | {props.date}</H2></span>
+
+        <span style={{display: "inline-block"}}>
+            <H2>{formData.author} | {formData.date}</H2>
+        </span>
         <P>Hey, we are meeting at X @ 7:00 PM. Bring a friend, and don't forget to reach out if you have any questions!</P>
         <div>
-            {Object.keys(props.meta).map((o, i) => {
-                console.log("o: " + o);
+            {Object.keys(meta).map((o, i) => {
                 return (
                     <button key={i} 
                         onClick={(e) => {
@@ -23,8 +55,8 @@ const Card = (props) => (
                 )
             })}
         </div>
-    </CardLayout>
-)
+    </CardLayout>)
+}
 
 const ExpandedCard = (props) => (
     <ExpandedCardLayout show={props.show}>
@@ -39,12 +71,13 @@ const StyledDiv = styled.div`
 
 const FullCard = (props) => {
 
-    const [expand, setExpand] = useState({on: false})
-
+    const [expand, setExpand] = useState({on: false});
+    const [editing, setEditing] = useState({editing: false});
     return (
         <StyledDiv className={`${props.id}`}>
             <ExpandedCard show={expand.on} />
-            <Card setExpand={setExpand} on={expand.on} {...props}/>
+            <Card setExpand={setExpand} on={expand.on} editing={editing.editing} setEditing={setEditing} {...props}/>
+            
         </StyledDiv>
     )
 }

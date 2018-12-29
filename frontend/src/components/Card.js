@@ -64,21 +64,20 @@ const ExpandedCard = (props) => (
     </ExpandedCardLayout>
 )
 
-const StyledDiv = styled.div`
+const CardContainerGrid = styled.div`
     display: grid;
 `;
-
 
 const FullCard = (props) => {
 
     const [expand, setExpand] = useState({on: false});
     const [editing, setEditing] = useState({editing: false});
     return (
-        <StyledDiv className={`${props.id}`}>
+        <CardContainerGrid className={`${props.id}`}>
             <ExpandedCard show={expand.on} />
             <Card setExpand={setExpand} on={expand.on} editing={editing.editing} setEditing={setEditing} {...props}/>
             
-        </StyledDiv>
+        </CardContainerGrid>
     )
 }
 

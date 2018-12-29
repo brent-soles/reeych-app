@@ -20,7 +20,6 @@ export const CardLayout = styled.div`
     grid-row: 1;
     grid-column: 1;
     width: 46rem;
-    height: 18rem;
     margin: 1.5rem;
     border-radius: 2rem;
     padding: 2rem;
@@ -51,13 +50,16 @@ export const H1Input = styled.input`
     font-family: Nunito;
     font-size: 3.6rem;
     border: none;
+    border-radius: 2rem;
+    padding: 2rem;
 
     &:hover {
-        background-color: grey;
+        background-color: rgba(0, 0, 0, .2);
     }
 
     &:focus {
-        bacground-color: darkgrey;
+        background-color: rgba(0, 0, 0, .5);
+        outline: none;
     }
 `;
 

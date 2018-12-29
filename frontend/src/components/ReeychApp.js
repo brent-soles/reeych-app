@@ -7,8 +7,8 @@ import styled from '@emotion/styled';
 /**
  * Import user components
  */
-import { CardContainerLayout, CardLayout } from './general/Styles';
-import FullCard from './Card';
+import { CardContainerLayout, CardLayout, H1Input } from './general/Styles';
+import FormCard from './CardForms/FormCard';
 
 const MainDiv = styled.div`
     width: 100%;
@@ -37,10 +37,17 @@ const ReeychApp = (props) => {
             }
         }
     `;
-    
-    const [state, setState] = useState({
-        
-    })
+
+    const UPDATE_CARD = gql`
+    mutation UpdateCard($id: ID!, $title: String!, $author: String!, $description: String!){
+        cards(id: $id){
+            id,
+            title,
+            author,
+            description
+        }
+    }
+`;
 
     return (
         <MainDiv>
@@ -53,7 +60,27 @@ const ReeychApp = (props) => {
                     return ( 
                         <CardContainerLayout>
                         {    cards.map((card, index) => {
-                                return <FullCard key={index} {...card} />
+                                const { id, ...restProps} = card;
+
+                                return (
+                                    <FormCard
+                                        id={`formCard-${id}`}
+                                        key={index}
+                                        initialState={restProps}
+                                        update={UPDATE_CARD}
+                                        render={({ state, edited, prevState, setState, setEdited, setPrevState })=> (
+                                            <CardLayout>
+                                                <H1Input 
+                                                    id={`title-${id}`} 
+                                                    type="text" 
+                                                    value={state.title} 
+                                                    onChange={(e) => setState({...state, title: e.target.value})}
+                                                    onBlur={(e) => setState({...state, title: e.target.value})}    
+                                                />
+                                            </CardLayout>
+                                        )}
+                                    />
+                                )
                             })
                         }
                         </CardContainerLayout>

@@ -49,11 +49,10 @@ const FormCard = (props) => {
                 {(updateCard, { data }) => (
                     // Passes event to props submit
                     <form id={id} 
+                        onKeyPress={e => console.log(e.keyCode)}
                         onSubmit={async e => {
                             e.preventDefault();
-                                     
                             document.activeElement.blur() //Trigger blur for currently active element
-                            
                             //Check to see if there is a diff in state & prev state
                             if(await validateStateDiff(state, prevState)){
                                 console.log("Change needed!:")
@@ -68,6 +67,7 @@ const FormCard = (props) => {
                             }
                         }}>
                         {render({ state, expanded, edited, prevState, setState, setEdited, setExpanded, setPrevState })}
+                        <input style={{display: 'none'}} type="submit"></input>
                     </form>
                 )}
             </Mutation>

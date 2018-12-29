@@ -7,7 +7,7 @@ import styled from '@emotion/styled';
 /**
  * Import user components
  */
-import { CardContainerLayout, CardLayout, H1Input } from './general/Styles';
+import { CardContainerLayout, CardLayout, H1Input, H2Input, Row, Column, H2Select } from './general/Styles';
 import FormCard from './CardForms/FormCard';
 
 const MainDiv = styled.div`
@@ -70,13 +70,41 @@ const ReeychApp = (props) => {
                                         update={UPDATE_CARD}
                                         render={({ state, edited, prevState, setState, setEdited, setPrevState })=> (
                                             <CardLayout>
-                                                <H1Input 
-                                                    id={`title-${id}`} 
-                                                    type="text" 
-                                                    value={state.title} 
-                                                    onChange={(e) => setState({...state, title: e.target.value})}
-                                                    onBlur={(e) => setState({...state, title: e.target.value})}    
-                                                />
+                                                <Row row={1}>
+                                                    <H1Input 
+                                                        id={`title-${id}`} 
+                                                        type="text" 
+                                                        value={state.title} 
+                                                        onChange={(e) => setState({...state, title: e.target.value})}
+                                                        onBlur={(e) => setState({...state, title: e.target.value})}    
+                                                    />
+                                                </Row>
+                                                <Row row={2}>
+                                                    <H2Select
+                                                        id={`author=${id}`}
+                                                        type="text"
+                                                        value={state.author}
+                                                        onChange={(e) => setState({...state, author: e.target.value})}
+                                                        onBlur={(e) => setState({...state, author: e.target.value})}
+                                                    >
+                                                        <option value="Brent">Brent</option>
+                                                        <option value="the dood">the dood</option>
+                                                        <option value="Another on">another one</option>
+                                                    </H2Select> 
+                                                    <H2Input 
+                                                        id={`date-${id}`}
+                                                        type="date" 
+                                                        value={state.date}
+                                                        min="2018-01-01" 
+                                                        onChange={(e) => setState({...state, date: e.target.value})}    
+                                                    />
+                                                </Row>
+                                                <Row row={3}>
+                                                    <textarea
+                                                        value={state.description}
+                                                        onChange={(e) => setState({...state, description: e.target.value})} 
+                                                    />
+                                                </Row>
                                             </CardLayout>
                                         )}
                                     />

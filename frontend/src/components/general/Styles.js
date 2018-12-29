@@ -26,6 +26,8 @@ export const CardLayout = styled.div`
     
     background-color: rgba(255, 255, 255, 1);
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
+
+    display: grid;
 `;
 
 export const ExpandedCardLayout = styled.div`
@@ -44,23 +46,6 @@ export const ExpandedCardLayout = styled.div`
 export const H1 = styled.h1`
     font-family: Nunito;
     font-size: 3.6rem;
-`;
-
-export const H1Input = styled.input`
-    font-family: Nunito;
-    font-size: 3.6rem;
-    border: none;
-    border-radius: 2rem;
-    padding: 2rem;
-
-    &:hover {
-        background-color: rgba(0, 0, 0, .2);
-    }
-
-    &:focus {
-        background-color: rgba(0, 0, 0, .5);
-        outline: none;
-    }
 `;
 
 export const H2 = styled.h2`
@@ -83,4 +68,69 @@ export const PrimaryButtonStyled = styled.button`
     font-family: Nunito, sans-serif;
     font-size: 2.4rem;
     padding: 1rem;
+`;
+
+/** Input Specific */
+
+export const H1Input = styled.input`
+    font-family: Nunito;
+    font-size: 3.6rem;
+    border: none;
+    border-radius: 2rem;
+    padding: .5rem .5rem;
+
+    &:hover {
+        background-color: rgba(0, 0, 0, .2);
+    }
+
+    &:focus {
+        background-color: rgba(0, 0, 0, .5);
+        outline: none;
+    }
+`;
+
+export const H2Input = styled.input`
+    font-family: Nunito;
+    font-size: 2.4rem;
+    font-weight: 300;
+    border: none;
+    border-radius: 2rem;
+    padding: .5rem .5rem;
+
+    &:hover {
+        background-color: rgba(0, 0, 0, .2);
+    }
+
+    &:focus {
+        background-color: rgba(0, 0, 0, .5);
+        outline: none;
+    }
+`;
+
+export const H2Select = styled.select`
+    font-family: Nunito;
+    font-size: 2.4rem;
+    font-weight: 300;
+    border: none;
+    border-radius: 2rem;
+    padding: .5rem .5rem;
+
+    &:hover {
+        background-color: rgba(0, 0, 0, .2);
+    }
+
+    &:focus {
+        background-color: rgba(0, 0, 0, .5);
+        outline: none;
+    }
+`;
+
+/** Grid specific  */
+
+export const Row = styled.div`
+    grid-row: ${props => props.row ? props.row : 0};
+`;
+
+export const Column = styled.div`
+    grid-colum: ${props => props.column ? props.column : 0};
 `;

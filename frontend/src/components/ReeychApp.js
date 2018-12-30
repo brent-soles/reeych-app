@@ -46,6 +46,19 @@ const ReeychApp = (props) => {
         }
     `;
 
+    const CREATE_CARD = gql`
+        mutation CreateCard($id: ID!, $title: String!, $author: String!, $description: String!){
+            createCard(belongsTo: $id, title: $title, author: $author,description: $description){
+                id,
+                title,
+                author,
+                description,
+                createdAt,
+                lastModified
+            }
+        }
+    `;
+
     const UPDATE_CARD = gql`
     mutation UpdateCard($id: ID!, $title: String!, $author: String!, $description: String!){
         updateCard(id: $id, title: $title, author: $author, description: $description){
@@ -59,6 +72,67 @@ const ReeychApp = (props) => {
 
     return (
         <MainDiv>
+            <FormCard
+                id={spaceId}
+                mutation={CREATE_CARD}
+                mutationName={"createCard"}
+                render={({ state, edited, prevState, setState, setEdited, setPrevState })=> (
+                    <CardLayout>
+                        <Row row={1}>
+                            <H1Input 
+                                id={`title-`} 
+                                type="text" 
+                                value={state.title} 
+                                onChange={(e) => {
+                                    setState({...state, title: e.target.value});
+                                    setEdited(true);
+                                }}
+                                onBlur={(e) => setState({...state, title: e.target.value})}    
+                            />
+                            {edited && <input type="submit"></input>}
+                        </Row>
+                        <Row row={2}>
+                            <H2Select
+                                id={`author-`}
+                                type="text"
+                                value={state.author}
+                                onChange={(e) => {
+                                    setState({...state, author: e.target.value});
+                                    setEdited(true);
+                                }}
+                                onBlur={(e) => setState({...state, author: e.target.value})}
+                            >
+                                <option value="Brent">Brent</option>
+                                <option value="the dood">the dood</option>
+                                <option value="Another on">another one</option>
+                            </H2Select> 
+                            <H2Input 
+                                id={`date-`}
+                                type="date" 
+                                value={state.date}
+                                onChange={(e) => setState({...state, date: e.target.value})}    
+                                onBlur={(e) => setState({...state, date: e.target.value})}
+                            />
+                        </Row>
+                        <Row row={3}>
+                            <Textarea
+                                value={state.description}
+                                onKeyPress={(e) => {
+                                    console.log(`keycode: ${e.key}`)
+                                    if(e.key === 'Enter'){
+                                        document.activeElement.blur();
+                                        document.getElementById(`${spaceId}`).focus();
+                                        console.log(document.activeElement);
+                                    }
+                                }}
+                                onChange={(e) => setState({...state, description: e.target.value})}
+                                onBlur={(e) => setState({...state, description: e.target.value})}
+                            />
+                        </Row>
+                    </CardLayout>
+                )}
+            />
+
             <Query query={ALL_CARDS} variables={{id: spaceId}}>    
                 {({ data, loading, error }) => {
                     if (loading) return <h1>Loading...</h1>
@@ -75,7 +149,8 @@ const ReeychApp = (props) => {
                                         id={`${id}`}
                                         key={index}
                                         initialState={restProps}
-                                        update={UPDATE_CARD}
+                                        mutation={UPDATE_CARD}
+                                        mutationName={"updateCard"}
                                         render={({ state, edited, prevState, setState, setEdited, setPrevState })=> (
                                             <CardLayout>
                                                 <Row row={1}>
@@ -93,7 +168,7 @@ const ReeychApp = (props) => {
                                                 </Row>
                                                 <Row row={2}>
                                                     <H2Select
-                                                        id={`author=${id}`}
+                                                        id={`author-${id}`}
                                                         type="text"
                                                         value={state.author}
                                                         onChange={(e) => {

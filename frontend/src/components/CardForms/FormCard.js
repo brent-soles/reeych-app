@@ -12,7 +12,7 @@ const CardContainerGrid = styled.div`
 `;
 
 const FormCard = (props) => {
-    const { id, render, onSubmit, initialState, update } = props;
+    const { id, render, onSubmit, initialState, mutation, mutationName } = props;
 
     const [prevState, setPrevState] = useState({...initialState});
     const [state, setState] = useState({...initialState});
@@ -44,8 +44,8 @@ const FormCard = (props) => {
 
     return (
         <CardContainerGrid>
-            <Mutation mutation={update}>
-                {(update, { data }) => (
+            <Mutation mutation={mutation}>
+                {(mutationAction, { data }) => (
                     // Passes event to props submit
                     <form id={id} 
                         onSubmit={async e => {
@@ -55,9 +55,10 @@ const FormCard = (props) => {
                             if(await validateStateDiff(state, prevState)){
                                 console.log("Change needed!:")
                                 setPrevState(state);
-                                const { data } = await update({variables: {id, ...state}});
+                                const { data } = await mutationAction({variables: {id, ...state}});
+                                console.log(data)
                                 if(data){
-                                    const {__typename, ...newState} = data.updateCard;
+                                    const {__typename, ...newState} = data[mutationName];
                                     console.log(newState)
                                     setState({...newState});
                                 } else {

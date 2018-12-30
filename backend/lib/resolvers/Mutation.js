@@ -15,6 +15,9 @@ const createSpace = async (_, args, ctx, info) => {
         return space;
     } catch(err) {
         console.log(`createSpace: ${err}`);
+        if( err.error ){
+            return err.error
+        }
     }
 
 }

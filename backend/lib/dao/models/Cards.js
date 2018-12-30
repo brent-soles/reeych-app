@@ -6,11 +6,17 @@ const cardsSchema = {
     author: String,
     description: String,
     meta: {
-        // _belongsTo: Schema.Types.ObjectId, don't need for now?
         details: String,
         notes: String,
         questions: String
-    }
+    },
+    createdAt: Date,
+    lastModified: Date,
+    dateToSend: {
+        type: Date,
+        default: null
+    },
+    sent: Boolean
 }
 
 // const Cards = new Schema(cardsSchema);
@@ -20,7 +26,12 @@ function CardsDAO(){
 }
 
 CardsDAO.prototype.create = async function(args) {
-    const card = new this.schema({...args});
+    const card = new this.schema({
+        ...args, 
+        createdAt: new Date(),
+        lastModified: new Date(),
+        dateToSend: (args.dateToSend ? args.dateToSend : null)
+    });
     try {
         const result = await card.save();
         result.belongsTo = result.belongsTo.valueOf();
@@ -33,7 +44,7 @@ CardsDAO.prototype.create = async function(args) {
 // Gets a cards with a specified card ID
 CardsDAO.prototype.get = async function({id}){
     try{
-        const card = await this.schema.findById(id);
+        const card = await this.schema.findOne({_id: id});
         return card;
     } catch (err) {
         throw err;
@@ -41,6 +52,7 @@ CardsDAO.prototype.get = async function({id}){
 }
 
 // Gets all cards for a certain space (Note: Space ID is used, not card)
+// Returns Query in decending order (newest created to oldest)
 CardsDAO.prototype.getAll = async function({ id }){
     try {
         const cards = await this.schema.find({ belongsTo: id }, null, {sort: {_id: -1}});
@@ -50,9 +62,16 @@ CardsDAO.prototype.getAll = async function({ id }){
     }
 }
 
+// Updates specified args sent to resolver
 CardsDAO.prototype.update = async function({ id, ...args}){
     try {
-        const card = await this.schema.findOneAndUpdate({_id: id}, {...args}, {new: true});
+        const card = await this.schema.findOneAndUpdate({_id: id}, 
+            {
+                ...args,
+                lastModified: new Date()
+            }, 
+            { new: true }
+        );
         return card;
     } catch (err) {
         throw err;
@@ -63,7 +82,7 @@ CardsDAO.prototype.delete = async function({ id }){
     //TODO: Write validation
     //Assume user is perfect... for now...
     try {
-        const card = await this.schema.findByIdAndDelete(id);
+        const card = await this.schema.findOneAndDelete({_id: id});
         return card;
     } catch(err){
         throw err;

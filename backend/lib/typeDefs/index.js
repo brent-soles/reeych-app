@@ -1,7 +1,7 @@
 const { gql } = require('apollo-server-koa');
 
 module.exports = gql`
-    
+    scalar Date
     """
         TypeDefs for unique/composite types
         
@@ -13,6 +13,9 @@ module.exports = gql`
         author: String!
         description: String!
         meta: CardMeta
+        createdAt: Date!
+        lastModified: Date!
+        dateToSend: Date
     }
 
     type CardMeta {
@@ -22,9 +25,11 @@ module.exports = gql`
     }
 
     type Space {
-        id: ID!,
-        name: String,
-        numCards: Int,
+        id: ID!
+        name: String
+        numCards: Int
+        createdAt: Date!
+        lastModified: Date!
         cards: [ID]
     }
 

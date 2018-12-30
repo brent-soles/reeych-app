@@ -45,7 +45,7 @@ const FormCard = (props) => {
     return (
         <CardContainerGrid>
             <Mutation mutation={update}>
-                {(updateCard, { data }) => (
+                {(update, { data }) => (
                     // Passes event to props submit
                     <form id={id} 
                         onSubmit={async e => {
@@ -55,9 +55,14 @@ const FormCard = (props) => {
                             if(await validateStateDiff(state, prevState)){
                                 console.log("Change needed!:")
                                 setPrevState(state);
-                                console.log(state);
-                                console.log(prevState);
-                                await updateCard({variables: {id, ...state}});
+                                const { data } = await update({variables: {id, ...state}});
+                                if(data){
+                                    const {__typename, ...newState} = data.updateCard;
+                                    console.log(newState)
+                                    setState({...newState});
+                                } else {
+                                    console.log("Something went wrong!");
+                                }
                                 
                             } else {
                                 console.log("No change")

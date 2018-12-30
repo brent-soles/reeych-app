@@ -43,7 +43,7 @@ CardsDAO.prototype.get = async function({id}){
 // Gets all cards for a certain space (Note: Space ID is used, not card)
 CardsDAO.prototype.getAll = async function({ id }){
     try {
-        const cards = await this.schema.find({ belongsTo: id });
+        const cards = await this.schema.find({ belongsTo: id }, null, {sort: {_id: -1}});
         return cards;
     } catch(err) {
         throw err;
@@ -52,7 +52,7 @@ CardsDAO.prototype.getAll = async function({ id }){
 
 CardsDAO.prototype.update = async function({ id, ...args}){
     try {
-        const card = await this.schema.findByIdAndUpdate(id, {...args});
+        const card = await this.schema.findOneAndUpdate({_id: id}, {...args}, {new: true});
         return card;
     } catch (err) {
         throw err;

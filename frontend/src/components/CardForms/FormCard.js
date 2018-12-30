@@ -16,8 +16,8 @@ const FormCard = (props) => {
 
     const [prevState, setPrevState] = useState({...initialState});
     const [state, setState] = useState({...initialState});
-    const [expanded, setExpanded] = useState({on: false});
-    const [edited, setEdited] = useState({editing: false});
+    const [expanded, setExpanded] = useState(false);
+    const [edited, setEdited] = useState(false);
 
     // Returns true on state diff & false if no diff
     const validateStateDiff = async (state, prevState) => {
@@ -33,7 +33,6 @@ const FormCard = (props) => {
             }
             if(state[key] !== prevState[key] 
             || typeof(state[key]) !== typeof(prevState[key])){
-                console.log("TRUE");
                 return true;
             }
         }
@@ -49,7 +48,6 @@ const FormCard = (props) => {
                 {(updateCard, { data }) => (
                     // Passes event to props submit
                     <form id={id} 
-                        onKeyPress={e => console.log(e.keyCode)}
                         onSubmit={async e => {
                             e.preventDefault();
                             document.activeElement.blur() //Trigger blur for currently active element
@@ -59,15 +57,16 @@ const FormCard = (props) => {
                                 setPrevState(state);
                                 console.log(state);
                                 console.log(prevState);
+                                await updateCard({variables: {id, ...state}});
                                 
                             } else {
                                 console.log("No change")
                                 console.log(state);
                                 console.log(prevState);
                             }
+                            setEdited(false);
                         }}>
                         {render({ state, expanded, edited, prevState, setState, setEdited, setExpanded, setPrevState })}
-                        <input style={{display: 'none'}} type="submit"></input>
                     </form>
                 )}
             </Mutation>

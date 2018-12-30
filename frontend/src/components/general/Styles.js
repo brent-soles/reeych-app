@@ -11,7 +11,7 @@ export const CardContainerLayout = styled.div`
     border-radius: 2rem;
 
     grid-template-columns: 60rem;
-    grid-template-rows: repeat(minmax(30rem, 80rem));
+    grid-template-rows: repeat(minmax(30rem, max-content));
 
     overflow-y: scroll;
 `;
@@ -76,7 +76,7 @@ export const H1Input = styled.input`
     font-family: Nunito;
     font-size: 3.6rem;
     border: none;
-    border-radius: 2rem;
+    border-radius: 1.2rem;
     padding: .5rem .5rem;
 
     &:hover {
@@ -94,7 +94,7 @@ export const H2Input = styled.input`
     font-size: 2.4rem;
     font-weight: 300;
     border: none;
-    border-radius: 2rem;
+    border-radius: 1.2rem;
     padding: .5rem .5rem;
 
     &:hover {
@@ -112,8 +112,29 @@ export const H2Select = styled.select`
     font-size: 2.4rem;
     font-weight: 300;
     border: none;
-    border-radius: 2rem;
+    border-radius: 1.2rem;
     padding: .5rem .5rem;
+
+    &:hover {
+        background-color: rgba(0, 0, 0, .2);
+    }
+
+    &:focus {
+        background-color: rgba(0, 0, 0, .5);
+        outline: none;
+    }
+`;
+
+export const Textarea = styled.textarea`
+    font-family: Nunito;
+    font-size: 1.8rem;
+    font-weight: 300;
+    padding: .5rem;
+    width: 45rem;
+    min-height: 7rem;
+    border-radius: 1.2rem;
+    border: none;
+    resize: none;
 
     &:hover {
         background-color: rgba(0, 0, 0, .2);

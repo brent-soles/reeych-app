@@ -7,7 +7,15 @@ import styled from '@emotion/styled';
 /**
  * Import user components
  */
-import { CardContainerLayout, CardLayout, H1Input, H2Input, Row, Column, H2Select } from './general/Styles';
+import { CardContainerLayout, 
+    CardLayout, 
+    H1Input, 
+    H2Input, 
+    Row, 
+    Column, 
+    H2Select,
+    Textarea
+} from './general/Styles';
 import FormCard from './CardForms/FormCard';
 
 const MainDiv = styled.div`
@@ -40,7 +48,7 @@ const ReeychApp = (props) => {
 
     const UPDATE_CARD = gql`
     mutation UpdateCard($id: ID!, $title: String!, $author: String!, $description: String!){
-        cards(id: $id){
+        updateCard(id: $id, title: $title, author: $author, description: $description){
             id,
             title,
             author,
@@ -64,7 +72,7 @@ const ReeychApp = (props) => {
 
                                 return (
                                     <FormCard
-                                        id={`formCard-${id}`}
+                                        id={`${id}`}
                                         key={index}
                                         initialState={restProps}
                                         update={UPDATE_CARD}
@@ -75,16 +83,23 @@ const ReeychApp = (props) => {
                                                         id={`title-${id}`} 
                                                         type="text" 
                                                         value={state.title} 
-                                                        onChange={(e) => setState({...state, title: e.target.value})}
+                                                        onChange={(e) => {
+                                                            setState({...state, title: e.target.value});
+                                                            setEdited(true);
+                                                        }}
                                                         onBlur={(e) => setState({...state, title: e.target.value})}    
                                                     />
+                                                    {edited && <input type="submit"></input>}
                                                 </Row>
                                                 <Row row={2}>
                                                     <H2Select
                                                         id={`author=${id}`}
                                                         type="text"
                                                         value={state.author}
-                                                        onChange={(e) => setState({...state, author: e.target.value})}
+                                                        onChange={(e) => {
+                                                            setState({...state, author: e.target.value});
+                                                            setEdited(true);
+                                                        }}
                                                         onBlur={(e) => setState({...state, author: e.target.value})}
                                                     >
                                                         <option value="Brent">Brent</option>
@@ -95,14 +110,23 @@ const ReeychApp = (props) => {
                                                         id={`date-${id}`}
                                                         type="date" 
                                                         value={state.date}
-                                                        min="2018-01-01" 
                                                         onChange={(e) => setState({...state, date: e.target.value})}    
+                                                        onBlur={(e) => setState({...state, date: e.target.value})}
                                                     />
                                                 </Row>
                                                 <Row row={3}>
-                                                    <textarea
+                                                    <Textarea
                                                         value={state.description}
-                                                        onChange={(e) => setState({...state, description: e.target.value})} 
+                                                        onKeyPress={(e) => {
+                                                            console.log(`keycode: ${e.key}`)
+                                                            if(e.key === 'Enter'){
+                                                                document.activeElement.blur();
+                                                                document.getElementById(`${id}`).focus();
+                                                                console.log(document.activeElement);
+                                                            }
+                                                        }}
+                                                        onChange={(e) => setState({...state, description: e.target.value})}
+                                                        onBlur={(e) => setState({...state, description: e.target.value})}
                                                     />
                                                 </Row>
                                             </CardLayout>

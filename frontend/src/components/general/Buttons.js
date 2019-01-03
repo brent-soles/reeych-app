@@ -1,6 +1,14 @@
 import React from 'react';
 import styled from '@emotion/styled';
 
+
+export const DeleteButton = styled.button`
+    color: red;
+    padding: 1rem;
+
+`;
+
+
 class BtnRender extends React.Component {
 
     constructor(props){

@@ -25,10 +25,14 @@ export const CREATE_CARD = gql`
 `;
 
 export const UPDATE_CARD = gql`
-    mutation UpdateCard($id: ID!, $title: String!){
-        updateCard(id: $id, title: $title){
+    mutation UpdateCard($id: ID!, $title: String, $author: String, $description: String){
+        updateCard(id: $id, title: $title, author: $author, description: $description){
             id,
-            title
+            title,
+            author,
+            createdAt,
+            lastModified,
+            description
         }
     }
 `;

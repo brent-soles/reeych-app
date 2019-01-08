@@ -19,19 +19,6 @@ import { ALL_CARDS, UPDATE_CARD } from './GraphQLOperations';
 
 
 const CardBoardQuery = ({ spaceId }) => {
-
-    const [allCards, setAllCards] = useState([]);
-
-    const removeElementFromList = (index) => {
-        if(index < 0 || index >= allCards.length){
-            throw `Out of bounds`;
-        }
-
-        setAllCards(prevState =>
-            prevState.filter((_, i) => i !== index)
-        ); // Returns true for only those 
-    }
-
     return(
     <CardContainerLayout>
         <Query query={ALL_CARDS} variables={{id: spaceId}} pollInterval={500}>    
@@ -40,36 +27,17 @@ const CardBoardQuery = ({ spaceId }) => {
                 if (error) return <h1>{error}</h1>
                 
                 const { cards } = data;
-                //console.log(cards);
                 console.log("REPAINT");
                 return cards.map((card, index) => {
                     const {id, ...restProps} = card;
-                    //console.log(restProps);
                     return (
                         <CardLayout key={index}>
-                            <Row row={1} >
-                                <h1>{restProps.title}</h1>
-                            </Row>
-                            <Row row={2} >
-                                <h1>{restProps.author}</h1>
-                                <h1>{restProps.lastModified}</h1>
-                                <h1>{restProps.createdAt}</h1>
-                            </Row>
-                            <Row row={3}>
-                                <h1>{restProps.description}</h1>
-                                <SingleCardDelete render={({ deleteCard }) => {
-                                    return <button onClick={()=> deleteCard({variables: {id}})}>Delete</button>
-                                }}/>
-                            </Row>
-                            
-                            {/* <FormCard 
+                            <FormCard 
                                 id={id}
                                 mutation={UPDATE_CARD} 
                                 mutationName={"updateCard"}
                                 initialState={restProps}
-                                render={({state, setState}) => {
-                                    
-                                    return (
+                                render={({state, setState}) => (
                                         <>
                                             <Row row={1} >
                                                 <H1Input 
@@ -78,15 +46,29 @@ const CardBoardQuery = ({ spaceId }) => {
                                                 />
                                             </Row>
                                             <Row row={2} >
-                                                <H1Input 
+                                                <H2Select 
                                                     value={state.author}
                                                     onChange={e => setState({...state, author: e.target.value})}
+                                                >
+                                                    <option value="author 1">author 1</option>
+                                                    <option value="author 2">author 2</option>
+                                                    <option value="author 3">author 3</option>
+                                                </H2Select>
+                                            </Row>
+                                            <Row row={3}>
+                                                <Textarea 
+                                                    value={state.description}
+                                                    onChange={e => setState({...state, description: e.target.value})}
                                                 />
+                                                <SingleCardDelete render={({ deleteCard }) => {
+                                                    return <DeleteButton onClick={()=> deleteCard({variables: {id}})}>Delete</DeleteButton>
+                                                }}/>
+                                                <input type="submit" />
                                             </Row>
                                         </>
                                     )
-                                }}
-                            /> */}
+                                }
+                            />
                         </CardLayout>
                     )
                 })

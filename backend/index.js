@@ -18,25 +18,38 @@ app.use(bodyParser());
 app.use(helmet());
 
 /** DB Connection */
-const dao = require('./lib/dao');
+const { applyDbToCtx } = require('./lib/dao');
 const { models } = require('./lib/dao/models');
 const dbconfig = {
     url: process.env.DB_URL,
     models
 }
 
-/** Inits db, and adds models to db object */
-dao.connect(dbconfig);
+try{
+    // Inits the db, then attches dao object to
+    // request context
+    const db = applyDbToCtx({
+        app,
+        config: dbconfig
+    });
 
-/** Server initialization */
-const server = new ApolloServer({ 
-    typeDefs, 
-    resolvers,
-    context: { DAO: dao.initSchema(dbconfig)} //Adds db to context
-});
-server.applyMiddleware({ app });
+    if(!db){
+        throw new Error(`Database error with applying to context: ${db}`)
+    }
 
-/** Let the serving... begin! */
-app.listen({ port: 7000 }, () => {
-    console.log(`Server ready at http://localhost:7000${server.graphqlPath}`);
-});
+    /** Server initialization */
+    const server = new ApolloServer({ 
+        typeDefs, 
+        resolvers,
+        context: ({ ctx }) => ctx // Attaches ctx to resolver context
+    });
+    server.applyMiddleware({ app });
+
+    /** Let the serving... begin! */
+    app.listen({ port: 7000 }, () => {
+        console.log(`Server ready at http://localhost:7000${server.graphqlPath}`);
+    });
+} catch (err){
+    console.log(err);
+    return -1;
+}

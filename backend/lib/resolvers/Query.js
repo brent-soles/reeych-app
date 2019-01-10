@@ -6,8 +6,8 @@
  * @param {*} ctx 
  * @param {*} info 
  */
-const card = async (_, args, ctx, info) => {
-    const { CardsDAO } = ctx.DAO;
+const card = async (_, args, { dao }, info) => {
+    const { CardsDAO } = dao;
     try{
         const card = await CardsDAO.get(args);
         return card;
@@ -17,8 +17,8 @@ const card = async (_, args, ctx, info) => {
     return null;
 }
 
-const cards = async (_, args, ctx, info) => {
-    const { CardsDAO } = ctx.DAO;
+const cards = async (_, args, { dao }, info) => {
+    const { CardsDAO } = dao;
     
     try {
         // Grabs cards and number of cards for data
@@ -38,8 +38,8 @@ const cards = async (_, args, ctx, info) => {
  * @param {*} ctx 
  * @param {*} info 
  */
-const space = async (_, args, ctx, info) => {
-    const { SpacesDAO } = ctx.DAO;
+const space = async (_, args, { dao }, info) => {
+    const { SpacesDAO } = dao;
     try {
         let space = await SpacesDAO.get(args);
         return space;
@@ -50,9 +50,7 @@ const space = async (_, args, ctx, info) => {
 }
 
 module.exports = {
-    Query: {
-        card,
-        cards,
-        space
-    }
+    card,
+    cards,
+    space
 }

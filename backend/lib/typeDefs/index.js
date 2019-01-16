@@ -6,6 +6,16 @@ module.exports = gql`
         TypeDefs for unique/composite types
         
     """
+
+    type User {
+        id: ID!
+        belongsTo: ID!
+        first: String!
+        last: String!
+        accessLvl: String!
+        cards: [Card]
+    }
+
     type Card {
         id: ID!
         belongsTo: ID!
@@ -26,10 +36,11 @@ module.exports = gql`
 
     type Space {
         id: ID!
-        name: String
+        name: String!
         numCards: Int
         createdAt: Date!
         lastModified: Date!
+        permissionLevels: String
         cards: [ID]
     }
 
@@ -40,6 +51,10 @@ module.exports = gql`
         details: String
         questions: String
         notes: String
+    }
+
+    input Permission {
+        level: String!
     }
     
     """
@@ -57,11 +72,9 @@ module.exports = gql`
         createSpace(name: String): Space
         updateSpace(id: ID!, name: String!): Space
         deleteSpace(id: ID!): Space
+        addSpaceUser(first: String!, last:String!, accessLvl: String): User
         createCard(belongsTo: ID!, title: String!, author: String!, description: String!, meta: CardMetaData): Card
         updateCard(id: ID!, title: String, author: String, description: String, meta: CardMetaData): Card
         deleteCard(id: ID!): Card
     }
-
-    
-
 `;

@@ -76,9 +76,9 @@ const FormCard = (props) => {
                                 if(!_.isEqual(state, data[mutationName])){
                                     console.log(state);
                                     console.log(data[mutationName]);
-                                    throw new Error(`State differs from returned state
-                                    > There was a problem with ${mutationName} mutation
-                                    `)
+                                    // throw new Error(`State differs from returned state
+                                    // > There was a problem with ${mutationName} mutation
+                                    // `)
                                 }
                                 
                                 if(clearOnSubmit){

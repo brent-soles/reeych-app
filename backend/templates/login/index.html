@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script src="main.js"></script>
+</head>
+
+<body>
+
+    <form id="reeychAuth" method="POST">
+        <input type="email" />
+        <input type="password" />
+        <button type="submit">Login</button>
+    </form>
+</body>
+
+<script>
+
+    var frm = document.getElementById('reeychAuth');
+    frm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        console.log(event.srcElement.children);
+        let chld = event.srcElement.children;
+        for(ch of chld){
+            if(ch.tagName === "INPUT") console.log(ch.value);
+        }
+
+    });
+</script>
+
+</html>

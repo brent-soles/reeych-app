@@ -33,14 +33,21 @@ app.use(helmet());
 // passport.serializeUser((user, done) => {
 //     done(null, null);
 // })
+<<<<<<< HEAD
 //app.use(static('login/'));
+=======
+app.use(static('login/'));
+>>>>>>> 6cb5a22dc3f70b28928afe24b6218518d04a755f
 
 app.use(async (ctx, next) => {
 
     if(ctx.path === '/login'){
         if(ctx.request.query.name){
             ctx.cookies.set('auth', jwt.sign({name: ctx.request.query.name}, 'salt'));
+<<<<<<< HEAD
             ctx.redirect('/');
+=======
+>>>>>>> 6cb5a22dc3f70b28928afe24b6218518d04a755f
         } else {
             console.log(ctx.path);
             await send(ctx, ctx.path, {

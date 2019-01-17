@@ -4,6 +4,7 @@ const permLevels = require('../../constants/access');
 const usersSchema = {
     first: String,
     last: String,
+    belongsTo: [Schema.Types.ObjectId],
     accessLvl: String,
     createdAt: Date,
     lastModified: Date,
@@ -18,7 +19,7 @@ const testEntities = {
 }
 
 function UsersDAO() {
-    this.schema = model('Spaces', new Schema(usersSchema));
+    this.schema = model('Users', new Schema(usersSchema));
 }
 
 UsersDAO.prototype.create = async function({ spaceId, first, last, AccessLvlReq, authorityEntity }){
@@ -30,6 +31,7 @@ UsersDAO.prototype.create = async function({ spaceId, first, last, AccessLvlReq,
     console.log(!testEntities.SPACE_ADMIN.includes(authorityEntity.requester)
     && 
     authorityEntity.accessLvl !==  permLevels.SPACE_ADMIN)
+    // If not a space adming, ro
     if( !testEntities.SPACE_ADMIN.includes(authorityEntity.requester)
         || 
         authorityEntity.accessLvl !==  permLevels.SPACE_ADMIN)

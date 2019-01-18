@@ -33,21 +33,14 @@ app.use(helmet());
 // passport.serializeUser((user, done) => {
 //     done(null, null);
 // })
-<<<<<<< HEAD
 //app.use(static('login/'));
-=======
-app.use(static('login/'));
->>>>>>> 6cb5a22dc3f70b28928afe24b6218518d04a755f
 
 app.use(async (ctx, next) => {
 
     if(ctx.path === '/login'){
         if(ctx.request.query.name){
-            ctx.cookies.set('auth', jwt.sign({name: ctx.request.query.name}, 'salt'));
-<<<<<<< HEAD
+            ctx.cookies.set('auth', jwt.sign({username: ctx.request.query.name}, 'salt'));
             ctx.redirect('/');
-=======
->>>>>>> 6cb5a22dc3f70b28928afe24b6218518d04a755f
         } else {
             console.log(ctx.path);
             await send(ctx, ctx.path, {
@@ -59,19 +52,12 @@ app.use(async (ctx, next) => {
         return;
     }
 
-    // const cookie = ctx.cookies.get('auth', 'salt');
-    // if(!cookie){
-    //     console.log("no cook")
+    // const token = jwt.verify(ctx.cookies.get('auth'), 'salt');
+    // if(!token){
     //     //ctx.redirect('/login');
-    //     return;
+    //     console.log("no tok");
+    //     return 400;
     // }
-
-    const token = jwt.verify(ctx.cookies.get('auth'), 'salt');
-    if(!token){
-        //ctx.redirect('/login');
-        console.log("no tok");
-        return 400;
-    }
 
     if(ctx.path === '/secret'){
         console.log(ctx.cookies.get('auth'));
@@ -114,43 +100,56 @@ try{
 
 
     /** Serve react app */
-    // LocalStrategy = require('passport-local').Strategy;
+    let LocalStrategy = require('passport-local').Strategy;
 
-    // passport.use(new LocalStrategy( function(username, password, done){
-        
-    //     console.log(username);
-        
-    //     if(username === 'brent'){
-    //             return done(null, { username });
-    //         }
+    passport.use(new LocalStrategy( function(username, password, done){
+        console.log("USERNAME")
+        console.log(username);
+        console.log("PASS")
+        console.log(password)
+        if(username === 'brent'){
+                return done(null, { username });
+            }
 
-    //         return done(null, false, {message: 'it went wrong'});
-    //     })
-    // )
+            return done(null, false, {message: 'it went wrong'});
+        })
+    )
+
+    let JwtStrategy = require('passport-jwt').Strategy;
+    let ExtractJwt = require('passport-jwt').ExtractJwt;
+
+    let opts = {
+        jwtFromRequest: function(ctx) {
+            const tk = ctx.cookies.get('auth');
+            return tk;
+        },
+        secretOrKey: 'salt'
+    }
+    passport.use(new JwtStrategy(opts, function(payload, done){
+            console.log("PAYLOAD");
+            console.log(payload);
+            if(payload.username === 'brent'){
+                return done(null, payload);
+            } else {
+                return done(null, false, {message: "no jwt"});
+            }
+        })
+    )
+
     
-    
+    app.use(async (ctx, next) => {
+        const tk = jwt.verify(ctx.cookies.get('auth'), 'salt');
+        console.log("TK");
+        console.log(tk);
+        await passport.authenticate('jwt', {session: false}, (err, user, info) => {
+            console.log(`~~~~~~~`);
+            console.log(user);
+            console.log(info);
+            return;
+        })(ctx);
 
-    // router.post('/login', async (ctx, next) => {
-        
-    //     console.log(ctx.request.query);
-    //     await next();
-    // })
-
-    // // router.get('/', passport.authenticate('local'), async (ctx, next) => {
-    // //     console.log(ctx.isAuthenticated())
-    // //     await next();
-    // // })
-
-    // app.use(async (ctx, next) => {
-    //     console.log(ctx.isAuthenticated());
-    //     console.log(ctx.isUnauthenticated());
-    //     //await ctx.login({username: `brent`});
-    //     if(!ctx.isAuthenticated()){
-    //         await next();
-    //     } else {
-    //         ctx.body = 'Unauth';
-    //     }
-    // })
+        await next();
+    })
 
     // app.use(router.routes()).use(router.allowedMethods());
 

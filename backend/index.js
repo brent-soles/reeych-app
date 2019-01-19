@@ -18,67 +18,49 @@ const typeDefs = require('./lib/typeDefs');
 /** Security Middlewares */
 const helmet = require('koa-helmet');
 const bodyParser = require('koa-bodyparser');
-const session = require('koa-session');
+
 const jwt = require('jsonwebtoken');
-const passport = require('koa-passport');
 
-// app.keys=['test']
-// app.use(session(app));
-
+app.keys=[process.env.COOKIE_KEY]
 app.use(bodyParser());
 app.use(helmet());
-//app.use(passport.initialize());
-// app.use(passport.session())
-
-// passport.serializeUser((user, done) => {
-//     done(null, null);
-// })
-//app.use(static('login/'));
 
 app.use(async (ctx, next) => {
 
-    if(ctx.path === '/login'){
-        if(ctx.request.query.name){
-            ctx.cookies.set('auth', jwt.sign({username: ctx.request.query.name}, 'salt'));
+    // FOR TESTING
+    if(ctx.path === '/gettoken'){
+        
+            ctx.cookies.set('reeych-auth', jwt.sign({ accessLvl: `admin` }, process.env.JWT_SALT));
             ctx.redirect('/');
-        } else {
-            console.log(ctx.path);
-            await send(ctx, ctx.path, {
-                root: './templates/',
-                index: 'index.html'
-            });
-        }
+        
+        // } else {
+            
+        //     await send(ctx, ctx.path, {
+        //         root: './templates/',
+        //         index: 'index.html'
+        //     });
+        // }
         
         return;
     }
-
-    // const token = jwt.verify(ctx.cookies.get('auth'), 'salt');
-    // if(!token){
-    //     //ctx.redirect('/login');
-    //     console.log("no tok");
-    //     return 400;
-    // }
-
-    if(ctx.path === '/secret'){
-        console.log(ctx.cookies.get('auth'));
-        console.log(jwt.verify(ctx.cookies.get('auth'), 'salt'))
-        //console.log(jwt.verify(ctx.cookies.get('auth'), 'satl'))
-    }
-
-    console.log("next");
     return next();
 });
 
 
-/** DB Connection */
-const { applyDbToCtx } = require('./lib/dao');
-const { models } = require('./lib/dao/models');
-const dbconfig = {
-    url: process.env.DB_URL,
-    models
-}
+
 
 try{
+    // Adds auth layer to ctx
+    const { applyPassportAuth, strategies } = require('./lib/auth');
+    applyPassportAuth(app, strategies);
+
+    /** DB Connection */
+    const { applyDbToCtx } = require('./lib/dao');
+    const { models } = require('./lib/dao/models');
+    const dbconfig = {
+        url: process.env.DB_URL,
+        models
+    }
     // Inits the db, then attches dao object to
     // request context
     const db = applyDbToCtx({
@@ -94,84 +76,29 @@ try{
     const server = new ApolloServer({ 
         typeDefs, 
         resolvers,
-        context: ({ ctx }) => ctx // Attaches ctx to resolver context
+        context: ({ ctx }) => {
+            console.log("CTX")
+            
+            return ctx;
+        } // Attaches ctx to resolver context
     });
     server.applyMiddleware({ app });
-
-
-    /** Serve react app */
-    let LocalStrategy = require('passport-local').Strategy;
-
-    passport.use(new LocalStrategy( function(username, password, done){
-        console.log("USERNAME")
-        console.log(username);
-        console.log("PASS")
-        console.log(password)
-        if(username === 'brent'){
-                return done(null, { username });
-            }
-
-            return done(null, false, {message: 'it went wrong'});
-        })
-    )
-
-    let JwtStrategy = require('passport-jwt').Strategy;
-    let ExtractJwt = require('passport-jwt').ExtractJwt;
-
-    let opts = {
-        jwtFromRequest: function(ctx) {
-            const tk = ctx.cookies.get('auth');
-            return tk;
-        },
-        secretOrKey: 'salt'
-    }
-    passport.use(new JwtStrategy(opts, function(payload, done){
-            console.log("PAYLOAD");
-            console.log(payload);
-            if(payload.username === 'brent'){
-                return done(null, payload);
-            } else {
-                return done(null, false, {message: "no jwt"});
-            }
-        })
-    )
-
     
     app.use(async (ctx, next) => {
-        const tk = jwt.verify(ctx.cookies.get('auth'), 'salt');
-        console.log("TK");
-        console.log(tk);
-        await passport.authenticate('jwt', {session: false}, (err, user, info) => {
-            console.log(`~~~~~~~`);
-            console.log(user);
-            console.log(info);
+        const { passport } = ctx;
+        //console.log(ctx.cookies);
+        await passport.authenticate('jwt', {session: false}, async (err, { authToken }, info) => {
+            console.log(authToken);
+            if(authToken.accessLvl === 'admin'){
+                console.log('sending/authing');
+                return next();
+            }
             return;
-        })(ctx);
+        })(ctx, next);
+        console.log('next');
+    });
 
-        await next();
-    })
-
-    // app.use(router.routes()).use(router.allowedMethods());
-
-    app.use((ctx, next) => {
-        return next();
-    })
-
-    // Works...
-    // calls on root
-    app.use(static('app/'));
-
-    
-
-    // router.get('/static', async (ctx, next) => {
-    //     console.log("hey")
-    //     await send(ctx, ctx.path, {
-    //         root: '/app'
-    //     })
-    //     next();
-    // })
-
-
+    app.use(static('app'));
 
     /** Let the serving... begin! */
     app.listen({ port: 7000 }, () => {

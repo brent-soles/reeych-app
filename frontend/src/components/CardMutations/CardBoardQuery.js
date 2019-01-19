@@ -22,12 +22,12 @@ const CardBoardQuery = ({ spaceId }) => {
     return(
     <CardContainerLayout>
         <Query query={ALL_CARDS} variables={{id: spaceId}} pollInterval={500}>    
-            {({ data, client, loading, error }) => {
+            {({ data, loading, error }) => {
                 if (loading) return <h1>Loading...</h1>
                 if (error) return <h1>{error}</h1>
                 
                 const { cards } = data;
-                console.log("REPAINT");
+
                 return cards.map((card, index) => {
                     const {id, ...restProps} = card;
                     return (

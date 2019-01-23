@@ -14,7 +14,6 @@ const jwt = require('jsonwebtoken');
 
 const stratOptions = {
     jwtFromRequest: (ctx) => {
-        console.log("Extracting cookies");
         const tokenPrim = ctx.cookies.get('reeych-auth');
         // Check to see if token is falsy
         if(!tokenPrim){
@@ -35,27 +34,15 @@ const stratOptions = {
 module.exports = {
     // Returns function to pass to passport.use()
     jwtStrat: new JwtStrategy(stratOptions, (jwtPayload, done) => {
-        // Token is passed in verified || null
+        // Token is passed in, either: verified || null
+        // If token valid, then not null/falsy
+        // Otherwise is falsy
         if(!jwtPayload){
             // Will return user as false
             // Used to indicate that user must sign in
             return done(null, false, {message: 'Invalid authentication token'});
         }
-        // Will return a 'user' object that is then attached to
-        // ctx
-        // To access authentication:
-        //  ctx.user.auth
+        // Will return a token, and pass to passport.authenticate() callback
         return done(null, { authToken: jwtPayload });
     })
 }
-
-
-// Use this in strategy
-// try {
-//     const token = jwt.verify(tokenPrim, JWT_SALT);
-
-// } catch (err) {
-//     console.log(err);
-//     ctx.throw(401, 'Access denied to requested resource');
-//     return null;
-// }

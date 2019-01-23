@@ -1,9 +1,9 @@
 const { Schema, model } = require('mongoose');
 
 const spacesSchema = {
-    name: String,
+    name: {type: String, required: true},
     numCards: Number,
-    createdAt: Date,
+    createdAt: {type: Date, default: Date.now},
     lastModified: Date,
     cards: [Schema.Types.ObjectId]
 }
@@ -52,6 +52,7 @@ SpacesDAO.prototype.create = async function({ name }){
 
 
 SpacesDAO.prototype.update = async function({id, name}){
+
     try {
         const space = await this.schema.findOneAndUpdate({ _id: id }, 
             { 
@@ -67,6 +68,7 @@ SpacesDAO.prototype.update = async function({id, name}){
 }
 
 SpacesDAO.prototype.delete = async function({id}){
+    
     try {
         const space = await this.schema.findOneAndDelete({ _id: id });
         return space;

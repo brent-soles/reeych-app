@@ -43,7 +43,7 @@ const applyDbToCtx = ({ app, config }) => {
 
     try {
         let db = mongoose.connect(url, { useNewUrlParser: true });
-        const daoModels = initSchema({ models }); // extracts models & formats to callable state
+        const daoModels = initSchema({ models }); // extracts models & formats to callable object
 
         if(!daoModels){
             throw new Error(`Models are invalid`);

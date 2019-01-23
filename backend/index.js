@@ -29,25 +29,12 @@ app.use(async (ctx, next) => {
 
     // FOR TESTING
     if(ctx.path === '/gettoken'){
-        
-            ctx.cookies.set('reeych-auth', jwt.sign({ accessLvl: `admin` }, process.env.JWT_SALT));
-            ctx.redirect('/');
-        
-        // } else {
-            
-        //     await send(ctx, ctx.path, {
-        //         root: './templates/',
-        //         index: 'index.html'
-        //     });
-        // }
-        
+        ctx.cookies.set('reeych-auth', jwt.sign({ accessLvl: `admin` }, process.env.JWT_SALT));
+        ctx.redirect('/');
         return;
     }
     return next();
 });
-
-
-
 
 try{
     // Adds auth layer to ctx
@@ -76,17 +63,15 @@ try{
     const server = new ApolloServer({ 
         typeDefs, 
         resolvers,
-        context: ({ ctx }) => {
-            console.log("CTX")
-            
-            return ctx;
-        } // Attaches ctx to resolver context
+        context: async ({ ctx }) => ctx // Attaches ctx to resolver context, can destructure at resolver level
     });
     server.applyMiddleware({ app });
     
+
+    // Adds a layer of authentication in order to GET UI
+    // TODO: Split this into a GET for a route
     app.use(async (ctx, next) => {
         const { passport } = ctx;
-        //console.log(ctx.cookies);
         await passport.authenticate('jwt', {session: false}, async (err, { authToken }, info) => {
             console.log(authToken);
             if(authToken.accessLvl === 'admin'){
@@ -95,9 +80,7 @@ try{
             }
             return;
         })(ctx, next);
-        console.log('next');
     });
-
     app.use(static('app'));
 
     /** Let the serving... begin! */

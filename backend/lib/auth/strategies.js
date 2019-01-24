@@ -14,6 +14,7 @@ const jwt = require('jsonwebtoken');
 
 const stratOptions = {
     jwtFromRequest: (ctx) => {
+        // tokenPrim == undecrypted token
         const tokenPrim = ctx.cookies.get('reeych-auth');
         // Check to see if token is falsy
         if(!tokenPrim){

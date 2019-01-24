@@ -8,6 +8,7 @@
   "private": true,
   "dependencies": {
     "apollo-server-koa": "^2.3.1",
+    "bcrypt": "^3.0.3",
     "dotenv": "^6.2.0",
     "graphql": "^14.0.2",
     "jsonwebtoken": "^8.4.0",
@@ -20,11 +21,17 @@
     "koa-session": "^5.10.1",
     "koa-static": "^5.0.0",
     "mongoose": "^5.4.0",
+    "node-gyp": "^3.8.0",
     "nodemon": "^1.18.9",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0"
   },
   "scripts": {
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^23.6.0",
+    "mockingoose": "^2.12.0"
   }
 }

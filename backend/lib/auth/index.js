@@ -1,8 +1,6 @@
 const passport = require('koa-passport');
 const { jwtStrat } = require('./strategies');
 
-console.log(`jwtStrat`)
-console.log(jwtStrat)
 /**
  * 
  * @param {koa app instance} app 
@@ -27,7 +25,6 @@ const applyPassportAuth = (app, strategies) => {
         });
         // Attaches passport object to context of application
         app.context.passport = passport;
-        console.log()
     } catch (err){
         throw new Error('TypeError: Unable to iterate over non-iterable');
     }
@@ -36,6 +33,7 @@ const applyPassportAuth = (app, strategies) => {
 module.exports = {
     applyPassportAuth,
     strategies: [
-        jwtStrat
+        jwtStrat,
+        
     ]
 }

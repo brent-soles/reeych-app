@@ -29,7 +29,7 @@ const SingleCardCreate = ({ spaceId }) => (
         mutationName={"createCard"}
         clearOnSubmit={true}
         render={({ state, edited, prevState, setState, setEdited, setPrevState })=> (
-            <CardLayout>
+            <CardLayout style={{height: '46rem'}}>
                 <Row row={1}>
                     <H1Input 
                         id={`title-`} 
@@ -42,13 +42,14 @@ const SingleCardCreate = ({ spaceId }) => (
                             });
                             setEdited(true);
                         }}
+                        placeholder={'Heading'}
                         onBlur={(e) => setState({...state, title: e.target.value})}    
                     />
                     {edited && <input type="submit"></input>}
                 </Row>
                 <Row row={2}>
                         <input type="date" value={state.date ? state.date : authors[0]} onChange={(e) => setState({...state, date: e.target.value})} />
-                        <select value={state.author} onChange={(e) => setState({...state, author: e.target.value})} >
+                        <select value={state.author ? state.author : authors[0]} onChange={(e) => setState({...state, author: e.target.value})} >
                             {authors.map((authr) => {
 
                                 return <option value={authr}>{authr}</option>
@@ -67,6 +68,7 @@ const SingleCardCreate = ({ spaceId }) => (
                                 });
                                 setEdited(true);
                             }}
+                            placeholder={'What do you want people to know?'}
                             onBlur={(e) => setState({...state, description: e.target.value})}    
                         />
                 </Row>

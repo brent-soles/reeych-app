@@ -15,7 +15,7 @@ const MainDiv = styled.div`
     // background-color: rgba(168, 246, 209, 1);
     background-color: rgba(0, 184, 158, 1);
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     flex-wrap: wrap;
 `;
 

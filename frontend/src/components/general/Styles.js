@@ -20,6 +20,7 @@ export const CardLayout = styled.div`
     grid-row: 1;
     grid-column: 1;
     width: 46rem;
+    ${props => props.height ? 'height: ' + props.height : ""}
     margin: 1.5rem;
     border-radius: 2rem;
     padding: 2rem;
@@ -28,6 +29,7 @@ export const CardLayout = styled.div`
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
 
     display: grid;
+    grid-template-rows: 6rem 6rem auto 6rem;
 `;
 
 export const ExpandedCardLayout = styled.div`
@@ -131,10 +133,15 @@ export const Textarea = styled.textarea`
     font-weight: 300;
     padding: .5rem;
     width: 45rem;
-    min-height: 7rem;
+    min-height: 0rem;
+    
     border-radius: 1.2rem;
     border: none;
     resize: none;
+
+    & {
+        height: calc(100% - .75rem);
+    }
 
     &:hover {
         background-color: rgba(0, 0, 0, .2);

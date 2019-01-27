@@ -47,7 +47,9 @@ async function hashPasswd(password) {
 const UsersSchema = new Schema(usersSchema);
 UsersSchema.pre('save', async function(next) {
     let user = this;
+    console.log(user.password);
     user.password = await hashPasswd(user.password);
+    console.log(user.password);
     next();
 })
 

@@ -12,6 +12,7 @@ import { CardContainerLayout,
     H2Select,
     Textarea
 } from '../general/Styles';
+import { PrimaryButton, SecondaryButton } from '../general/StyledButtons';
 import FormCard from '../FormCard/FormCard';
 import { CREATE_CARD } from './GraphQLOperations';
 
@@ -21,10 +22,16 @@ const authors = ['brent', 'aidan', 'zee zee'];
 // Could possibly use setState on init paint, and then modify
 // TODO: ^^^
 const SingleCardCreate = ({ spaceId }) => (
-
-
     <FormCard
         id={spaceId}
+        initialState={
+            {
+                title: "",
+                author: authors[0],
+                date: Date.now(),
+                description: ""
+            }
+        }
         mutation={CREATE_CARD}
         mutationName={"createCard"}
         clearOnSubmit={true}
@@ -45,13 +52,12 @@ const SingleCardCreate = ({ spaceId }) => (
                         placeholder={'Heading'}
                         onBlur={(e) => setState({...state, title: e.target.value})}    
                     />
-                    {edited && <input type="submit"></input>}
+                    
                 </Row>
                 <Row row={2}>
-                        <input type="date" value={state.date ? state.date : authors[0]} onChange={(e) => setState({...state, date: e.target.value})} />
+                        <input type="date" value={state.date} onChange={(e) => setState({...state, date: e.target.value})} />
                         <select value={state.author ? state.author : authors[0]} onChange={(e) => setState({...state, author: e.target.value})} >
                             {authors.map((authr) => {
-
                                 return <option value={authr}>{authr}</option>
                             })}
                         </select>
@@ -71,6 +77,10 @@ const SingleCardCreate = ({ spaceId }) => (
                             placeholder={'What do you want people to know?'}
                             onBlur={(e) => setState({...state, description: e.target.value})}    
                         />
+                    {/* {edited && <input type="submit">Save</input>} */}
+                    <PrimaryButton>Save</PrimaryButton>
+                    <SecondaryButton>Update</SecondaryButton>
+                    
                 </Row>
             </CardLayout>
         )}

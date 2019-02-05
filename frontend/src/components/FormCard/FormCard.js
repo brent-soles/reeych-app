@@ -66,7 +66,8 @@ const FormCard = (props) => {
                             // Bad UX if there is a reload
                             e.preventDefault();
                             document.activeElement.blur() //Trigger blur for currently active element
-                            
+                            console.log("SUBMITTING:")
+                            console.log(state);
                             // TODO: Implement history checking
                             // Check to see if there is a diff in state & prev state
                             // const st = await _.isEqual(state, prevState);

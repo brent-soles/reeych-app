@@ -52,7 +52,6 @@ const SingleCardCreate = ({ spaceId }) => (
                         placeholder={'Heading'}
                         onBlur={(e) => setState({...state, title: e.target.value})}    
                     />
-                    
                 </Row>
                 <Row row={2}>
                         <input type="date" value={state.date} onChange={(e) => setState({...state, date: e.target.value})} />
@@ -77,10 +76,9 @@ const SingleCardCreate = ({ spaceId }) => (
                             placeholder={'What do you want people to know?'}
                             onBlur={(e) => setState({...state, description: e.target.value})}    
                         />
-                    {/* {edited && <input type="submit">Save</input>} */}
-                    <PrimaryButton>Save</PrimaryButton>
-                    <SecondaryButton>Update</SecondaryButton>
-                    
+                </Row>
+                <Row row={4}>
+                    <PrimaryButton type="submit" form={spaceId} value="save">Save</PrimaryButton>
                 </Row>
             </CardLayout>
         )}

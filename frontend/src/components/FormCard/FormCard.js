@@ -65,6 +65,7 @@ const FormCard = (props) => {
                             // Prevents reload of page
                             // Bad UX if there is a reload
                             e.preventDefault();
+                            console.log(e.currentTarget)
                             document.activeElement.blur() //Trigger blur for currently active element
                             console.log("SUBMITTING:")
                             console.log(state);

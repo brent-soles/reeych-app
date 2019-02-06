@@ -13,6 +13,7 @@ import { CardContainerLayout,
     Textarea
 } from '../general/Styles';
 import { DeleteButton } from '../general/Buttons';
+import { PrimaryButton, TertiaryButton } from '../general/StyledButtons';
 import FormCard from '../FormCard/FormCard';
 import SingleCardDelete from './SingleCardDelete';
 import { ALL_CARDS, UPDATE_CARD } from './GraphQLOperations';
@@ -33,14 +34,13 @@ const CardBoardQuery = ({ spaceId }) => {
                 return cards.map((card, index) => {
                     const {id, ...restProps} = card;
                     return (
-                        <CardLayout key={index}>
                             <FormCard 
                                 id={id}
                                 mutation={UPDATE_CARD} 
                                 mutationName={"updateCard"}
                                 initialState={restProps}
                                 render={({state, setState}) => (
-                                        <>
+                                    <CardLayout key={index} style={{height: '30rem'}}>
                                             <Row row={1} >
                                                 <H1Input 
                                                     value={state.title}
@@ -62,16 +62,18 @@ const CardBoardQuery = ({ spaceId }) => {
                                                     value={state.description}
                                                     onChange={e => setState({...state, description: e.target.value})}
                                                 />
-                                                <SingleCardDelete render={({ deleteCard }) => {
-                                                    return <DeleteButton onClick={()=> deleteCard({variables: {id}})}>Delete</DeleteButton>
-                                                }}/>
-                                                <input type="submit" />
                                             </Row>
-                                        </>
+                                            <Row row={4}>
+                                                <PrimaryButton type="submit" form={id}>Update</PrimaryButton>
+                                                <SingleCardDelete render={({ deleteCard }) => {
+                                                        return <TertiaryButton onClick={()=> deleteCard({variables: {id}})}>Delete</TertiaryButton>
+                                                    }}
+                                                />
+                                            </Row>
+                                        </CardLayout>
                                     )
                                 }
                             />
-                        </CardLayout>
                     )
                 })
             }}

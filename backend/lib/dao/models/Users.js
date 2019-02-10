@@ -3,32 +3,33 @@ const bcrypt = require('bcrypt');
 const permLevels = require('../../constants/access');
 
 /**
- * At a high level, users can only adminster one space,
- * Once space being 
+ * 
  */
 
-const belongsToSchema = new Schema({
-    space: {
-        type: Schema.Types.ObjectId,
-        required: true,
-        unique: true
-    },
-    accessLvl: {
-        type: String,
-        required: true
-    }
-});
-
 const usersSchema = {
-    first: { type: String, required: true },
-    last: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
+    name: {
+        first: { type: String, required: true },
+        last: { type: String, required: true },
+        full: {type: String, required: false}
+    },
+    emails:[ 
+        { type: String, required: true, unique: true }
+    ],
     password: { type: String, required: true },
-    belongsTo: [belongsToSchema],
-    // accessLvl: { type: String, required: true }, Don't need, but will keep for now
-    createdAt: { type: Date, default: Date.now },
-    lastModified: { type: Date, default: Date.now },
-    cards: [Schema.Types.ObjectId]
+    memberships: [ 
+        {
+            spaceId: { type: Schema.Types.ObjectId, required: true },
+            spaceName: {type: String, required: true, unique: true},
+            accessLvl: { type: Number, required: true }
+        }
+    ],
+    cards: [
+        { cardId: Schema.Types.ObjectId, posted: Boolean }
+    ],
+    auth: { 
+        token: { type: String, required: true, unique: true },
+        expired: { type: Boolean, required: true } 
+    }
 }
 
 
@@ -44,12 +45,11 @@ async function hashPasswd(password) {
 /**
  * Mongoose User docuemt middlewares
  */
-const UsersSchema = new Schema(usersSchema);
+const UsersSchema = new Schema(usersSchema, { timestamps: true });
+
 UsersSchema.pre('save', async function(next) {
     let user = this;
-    console.log(user.password);
     user.password = await hashPasswd(user.password);
-    console.log(user.password);
     next();
 })
 
@@ -63,23 +63,49 @@ UsersSchema.pre('save', async function(next) {
  * to a Microservice w/ any other backend
  */
 function UsersDAO() {
-    //this.schema = ;
     this.schema = model('Users', UsersSchema);
-    this.saltRounds = 10;
+    this.saltRounds = 18;
 }
 
-UsersDAO.prototype.registerUser = async function(userToCreate) {
+/**
+ * Registers a new user to the system then they can do any/all of the following:
+ *  1. Create a space/organization
+ *  2. Join a space
+ *  3. Browse public (or if a member of a private one) space
+ * 
+ * params:
+ *  {*} userToCreate: object with user details about who is being created
+ *          defaults shoule be to only have username/passwd 
+ */
+UsersDAO.prototype.registerUser = async function(userToCreate, ctx) {
     try {
-        //const {first, last, email, password, belongsTo, accessLvl } = userToCreate;
-        const newUser = new this.schema({...userToCreate});
+        const { first, last, email, password } = userToCreate; // gets necessary form data
+        const newUser = new this.schema({
+            name: {
+                first,
+                last,
+                full: `${first} ${last}`
+            },
+            emails: [
+                { email, verified: false }
+            ],
+            password, // This value gets hashed and replaced upon save
+            memberships: [],
+            cards: [],
+            token: {
+                token: ,
+                expired: false
+            }
+        });
         await newUser.save();
         return newUser
-
     } catch(err){
         console.log(err)
         throw new Error(`Error creating user`); // Bubbles up to resolver
     }
 }
+
+UsersDAO.prototype.
 
 // udao = new UsersDAO();
 // udao.registerUser({

@@ -1,5 +1,7 @@
 const { Schema, model } = require('mongoose');
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const isJesting = process.env.JWT_SALT ? false : true; // Determines if testing or not
 const permLevels = require('../../constants/access');
 
 /**
@@ -13,7 +15,9 @@ const usersSchema = {
         full: {type: String, required: false}
     },
     emails:[ 
-        { type: String, required: true, unique: true }
+        new Schema({ 
+            email: { type: String, required: true, unique: true, match: /([a-zA-z]|(\.|\-|\_))+\@[a-zA-z]+\.(com|net|org)$/ }, verified: { type: Boolean, default: false } 
+        }, { _id: false })
     ],
     password: { type: String, required: true },
     memberships: [ 
@@ -28,18 +32,24 @@ const usersSchema = {
     ],
     auth: { 
         token: { type: String, required: true, unique: true },
+        expires: {type: Number, required: true},
         expired: { type: Boolean, required: true } 
     }
 }
 
+/************ Helper Functions ***************/
 
 async function hashPasswd(password) {
     return await new Promise((resolve, reject) => {
-        bcrypt.hash(password, 10, (err, hash) => {
+        bcrypt.hash(password, 12, (err, hash) => {
             if(err) reject(err);
             resolve(hash);
         })
     })
+}
+
+const _MinutesFromNow = (numOfMinutes) => {
+    return Math.floor(Date.now() / 1000) + 60 * numOfMinutes;
 }
 
 /**
@@ -47,9 +57,11 @@ async function hashPasswd(password) {
  */
 const UsersSchema = new Schema(usersSchema, { timestamps: true });
 
+// Hashes password, and replaces it on submission
 UsersSchema.pre('save', async function(next) {
     let user = this;
     user.password = await hashPasswd(user.password);
+    
     next();
 })
 
@@ -64,7 +76,6 @@ UsersSchema.pre('save', async function(next) {
  */
 function UsersDAO() {
     this.schema = model('Users', UsersSchema);
-    this.saltRounds = 18;
 }
 
 /**
@@ -73,13 +84,25 @@ function UsersDAO() {
  *  2. Join a space
  *  3. Browse public (or if a member of a private one) space
  * 
+ * Returns a signed/valid JWT to attach to user cookie
  * params:
- *  {*} userToCreate: object with user details about who is being created
+ *  {*} userRegistrationData: object with user details about who is being created
  *          defaults shoule be to only have username/passwd 
  */
-UsersDAO.prototype.registerUser = async function(userToCreate, ctx) {
+UsersDAO.prototype.registerUser = async function(userRegistrationData) {
+    // Filters emails
     try {
-        const { first, last, email, password } = userToCreate; // gets necessary form data
+        const { first, last, email, password } = userRegistrationData; // gets necessary form data
+        // Initial Token creation
+        const expiration = _MinutesFromNow(30); // Sets the token to expire in 30 minutes
+        const initToken = jwt.sign({ 
+            name: `${first} ${last}`,
+            email,
+            memberships: [],
+            exp: expiration
+        }, isJesting ? 'jestTest' : process.env.JWT_SALT); //Signs token
+        
+        // Create the new user
         const newUser = new this.schema({
             name: {
                 first,
@@ -92,30 +115,69 @@ UsersDAO.prototype.registerUser = async function(userToCreate, ctx) {
             password, // This value gets hashed and replaced upon save
             memberships: [],
             cards: [],
-            token: {
-                token: ,
+            auth: {
+                token: initToken,
+                expires: expiration,
                 expired: false
             }
         });
         await newUser.save();
-        return newUser
-    } catch(err){
-        console.log(err)
+        return initToken;
+    } catch(err) {
         throw new Error(`Error creating user`); // Bubbles up to resolver
     }
 }
 
-UsersDAO.prototype.
+/**
+ * Function returns a valid JWT, after saving it to the most recent token used
+ * 
+ */
+UsersDAO.prototype.loginUser = async function(userLoginData){
+    try {
+        const { email, password } = userLoginData; // Should only have these two fields
+        
+        // Grabs user data based off of subdocument email
+        const user = await this.schema.findOne({ 
+            emails: {
+                $elemMatch: {
+                    email: email
+                }
+            }
+        });
 
-// udao = new UsersDAO();
-// udao.registerUser({
-//     first: 'Brent',
-//     last: 'Soles',
-//     email: 'Its@email.com',
-//     password: 'hello',
-//     belongsTo: '1',
-//     accessLvl: 'admin'
-// })
+        // Password validation
+        // if valid => create new token & update user model with new token 
+        // Otherwise throw an authentication error
+        const validPassword = await bcrypt.compare(password, user.password);
+        if(validPassword){
+            const newToken = jwt.sign({ 
+                name: `${user.name.first} ${user.name.last}`,
+                email,
+                memberships: user.memberships,
+                exp: _MinutesFromNow(30)
+            }, isJesting ? 'jestTest' : process.env.JWT_SALT);
+
+            // Updates User to have new token for further calls
+            const udpatedUser = await this.schema.findOneAndUpdate({ _id: user._id }, {
+                auth: {
+                    token: newToken,
+                    expires: _MinutesFromNow(30),
+                    expired: false
+                }
+            }, {
+                new: true,
+                runValidators: true
+            });
+
+            // Used for running tests
+            return newToken;
+        }
+
+        throw new Error('User has wrong credentials');
+    } catch(err) {
+        throw new Error(`Error authenticating user`);
+    }
+}
 
 module.exports = {
     UsersDAO: new UsersDAO()

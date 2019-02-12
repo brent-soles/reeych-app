@@ -168,8 +168,6 @@ UsersDAO.prototype.loginUser = async function(userLoginData){
                 new: true,
                 runValidators: true
             });
-
-            // Used for running tests
             return newToken;
         }
 

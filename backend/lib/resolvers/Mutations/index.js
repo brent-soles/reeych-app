@@ -1,9 +1,9 @@
-const CardMutations = require('./CardMutations');
-const SpaceMutations = require('./SpaceMutations');
-const UserMutations = require('./UserMutations');
+const cardMutations = require('./cardMutations');
+const spaceMutations = require('./spaceMutations');
+const userMutations = require('./userMutations');
 
 module.exports = {
-    ...CardMutations,
-    ...SpaceMutations,
-    ...UserMutations
+    ...cardMutations,
+    ...spaceMutations,
+    ...userMutations,
 }

@@ -62,19 +62,21 @@ module.exports = gql`
     """
 
     type Query {
-        cards(id: ID!): [Card]
-        card(id: ID!, spaceId: ID): Card
-        space(id: ID): Space
-        spaces: [Space]
+        getCards(id: ID!): [Card]
+        getCard(id: ID!, spaceId: ID): Card
+        getSpace(id: ID): Space
+        getSpaces(id: ID): [Space]
+        getUser(id: ID): User
+        getUsers(ids: [ID]): [User]
     }
 
     type Mutation {
         createSpace(name: String): Space
-        updateSpace(id: ID!, name: String!): Space
-        deleteSpace(id: ID!): Space
-        addSpaceUser(first: String!, last:String!, accessLvl: String): User
-        createCard(belongsTo: ID!, title: String!, author: String!, description: String!, meta: CardMetaData): Card
-        updateCard(id: ID!, title: String, author: String, description: String, meta: CardMetaData): Card
-        deleteCard(id: ID!): Card
+        updateSpace(spaceId: ID!, name: String!): Space
+        deleteSpace(spaceId: ID!): Space
+        addSpaceUser(first: String!, last:String!, email: String!, accessLvl: String): User
+        createCard(spaceId: ID!, title: String!, author: String!, description: String!, meta: CardMetaData): Card
+        updateCard(cardId: ID!, title: String, author: String, description: String, meta: CardMetaData): Card
+        deleteCard(cardId: ID!): Card
     }
 `;

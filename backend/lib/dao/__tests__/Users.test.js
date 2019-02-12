@@ -183,7 +183,6 @@ describe('User Login', () => {
 
     it('Throws error, given wrong credentials', async () => {
         mockingoose.Users.toReturn(_usersSchemaReturnedOnCreate, 'findOne');
-
         try {
             await UsersDAO.loginUser({ ..._validFormData, password: "wr0ngp4ssw0rd" });
         } catch (err) {

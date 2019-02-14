@@ -24,9 +24,9 @@ const createCard = async (_, args, { dao }, info) => {
     try {
         const card = await CardsDAO.create(args);
         // Make belongsTo readable
-        card.belongsTo = card.belongsTo.valueOf();
+        card.spaceId = card.spaceId.valueOf();
         await SpacesDAO.addCard({
-            spaceId: card.belongsTo,
+            spaceId: card.spaceId,
             cardId: card._id
         })
 

@@ -1,5 +1,5 @@
 ---
-to: <% if( type === 'all' || type === 'query' ) { %>lib/resolvers/Queries/<%= model %>Queries.js<% } else { %><%= null %><% } %>
+to: <% if( type === 'all' || type === 'query' ) { %>lib/resolvers/Queries/<%= h.changeCase.camelCase(model) %>Queries.js<% } else { %><%= null %><% } %>
 unless_exists: true
 ---
 
@@ -41,5 +41,5 @@ const get<%= h.changeCase.pascalCase(model) %>s = async (_, args, ctx, info) => 
 
 module.exports = {
     get<%= h.changeCase.pascalCase(model) %>,
-    get<%= h.changeCase.pascalCase(model) %>S
+    get<%= h.changeCase.pascalCase(model) %>s
 }

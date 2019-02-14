@@ -1,7 +1,7 @@
 ---
 inject: true
 to: <% if( type === 'all' || type === 'mutation' ) { %>lib/resolvers/Mutations/index.js<% } else { %><%= null %><% } %>
-skip_if: <%= model %>Mutations
-after: \{
+after: "module.exports"
+skip_if: "    ...<%= h.changeCase.camelCase(model) %>Mutations,"
 ---
-    ...<%= model %>Mutations,
+    ...<%= h.changeCase.camelCase(model) %>Mutations,

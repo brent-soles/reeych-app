@@ -1,7 +1,7 @@
 ---
 inject: true
 to: <% if( type === 'all' || type === 'query' ) { %>lib/resolvers/Queries/index.js<% } else { %><%= null %><% } %>
-skip_if: <%= model %>Queries
-after: \{
+after: "module.exports"
+skip_if: "    ...<%= h.changeCase.camelCase(model) %>Queries,"
 ---
-    ...<%= model %>Queries,
+    ...<%= h.changeCase.camelCase(model) %>Queries,

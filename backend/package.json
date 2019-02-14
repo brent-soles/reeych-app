@@ -28,7 +28,10 @@
   },
   "scripts": {
     "dev": "nodemon index.js",
-    "test": "jest"
+    "test": "jest",
+    "gql:scaffold": "hygen gql scaffold --type all",
+    "gql:scaffoldQuery": "hygen gql scaffold --type query",
+    "gql:scaffoldMutation": "hygen gql scaffold --type mutation"
   },
   "devDependencies": {
     "jest": "^23.6.0",

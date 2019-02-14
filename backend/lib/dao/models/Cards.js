@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 
 const cardsSchema = {
-    belongsTo: Schema.Types.ObjectId,
+    spaceId: Schema.Types.ObjectId,
     title: String,
     author: String,
     description: String,
@@ -10,8 +10,6 @@ const cardsSchema = {
         notes: String,
         questions: String
     },
-    createdAt: Date,
-    lastModified: Date,
     dateToSend: {
         type: Date,
         default: null
@@ -22,19 +20,14 @@ const cardsSchema = {
 // const Cards = new Schema(cardsSchema);
 
 function CardsDAO(){
-    this.schema = model('Cards', new Schema(cardsSchema));
+    this.schema = model('Cards', new Schema(cardsSchema, { timestamps: true }));
 }
 
 CardsDAO.prototype.create = async function(args) {
-    const card = new this.schema({
-        ...args, 
-        createdAt: new Date(),
-        lastModified: new Date(),
-        dateToSend: (args.dateToSend ? args.dateToSend : null)
-    });
+    const card = new this.schema({ ...args });
     try {
         const result = await card.save();
-        result.belongsTo = result.belongsTo.valueOf();
+        result.spaceId = result.spaceId.valueOf();
         return result;
     } catch(err){
         throw err;

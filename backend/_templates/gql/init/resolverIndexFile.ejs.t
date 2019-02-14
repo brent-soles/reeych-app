@@ -1,3 +1,7 @@
+---
+to: lib/resolvers/index.js
+unless_exists: true
+---
 // This file is auto-generated using: hygen gql init
 //  Please do not change this file, as it is generated and scaffolding will break
 // There should be no injection into this file, due to resolvers only needing:

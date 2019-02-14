@@ -1,11 +1,19 @@
+/**
+ * THIS FILE IS GENERATED, DO NOT EDIT FORMAT
+ * EDITING FORMAT MAY BREAK FURTHER SCAFFOLDING
+ */
 const { gql } = require('apollo-server-koa');
 
+/* Query and Mutation Resolver TypeDefs */
+const { cardTypeDef, cardQueries, cardMutations } = require('./cardTypeDefs');
+
 module.exports = gql`
+    
+    """ TypeDefs for scalar types, left up to implementation """
+
     scalar Date
-    """
-        TypeDefs for unique/composite types
-        
-    """
+
+    """ TypeDefs User Defined Types """
 
     type User {
         id: ID!
@@ -16,17 +24,7 @@ module.exports = gql`
         cards: [Card]
     }
 
-    type Card {
-        id: ID!
-        belongsTo: ID!
-        title: String!
-        author: String!
-        description: String!
-        meta: CardMeta
-        createdAt: Date!
-        lastModified: Date!
-        dateToSend: Date
-    }
+    ${ cardTypeDef }
 
     type CardMeta {
         details: String
@@ -44,9 +42,8 @@ module.exports = gql`
         cards: [ID]
     }
 
-    """
-        Unique input types
-    """
+    """ Unique input types """
+
     input CardMetaData {
         details: String
         questions: String
@@ -57,17 +54,14 @@ module.exports = gql`
         level: String!
     }
     
-    """
-        CRUD Types
-    """
+    """ CRUD Types """
 
     type Query {
-        getCards(id: ID!): [Card]
-        getCard(id: ID!, spaceId: ID): Card
         getSpace(id: ID): Space
         getSpaces(id: ID): [Space]
         getUser(id: ID): User
         getUsers(ids: [ID]): [User]
+        ${ cardQueries }
     }
 
     type Mutation {
@@ -75,8 +69,6 @@ module.exports = gql`
         updateSpace(spaceId: ID!, name: String!): Space
         deleteSpace(spaceId: ID!): Space
         addSpaceUser(first: String!, last:String!, email: String!, accessLvl: String): User
-        createCard(spaceId: ID!, title: String!, author: String!, description: String!, meta: CardMetaData): Card
-        updateCard(cardId: ID!, title: String, author: String, description: String, meta: CardMetaData): Card
-        deleteCard(cardId: ID!): Card
+        ${ cardMutations }
     }
 `;

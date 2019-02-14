@@ -1,5 +1,5 @@
 ---
-to: <% if( type === 'all' || type === 'mutation' ) { %>lib/resolvers/Mutations/<%= model %>Mutations.js<% } else { %><%= null %><% } %>
+to: <% if( type === 'all' || type === 'mutation' ) { %>lib/resolvers/Mutations/<%= h.changeCase.camelCase(model) %>Mutations.js<% } else { %><%= null %><% } %>
 unless_exists: true
 ---
 

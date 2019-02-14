@@ -5,6 +5,8 @@
 const { gql } = require('apollo-server-koa');
 
 /* Query and Mutation Resolver TypeDefs */
+const { userTypeDef, userQueries, userMutations } = require('./userTypeDefs')
+const { spaceTypeDef, spaceQueries, spaceMutations } = require('./spaceTypeDefs');
 const { cardTypeDef, cardQueries, cardMutations } = require('./cardTypeDefs');
 
 module.exports = gql`
@@ -14,32 +16,14 @@ module.exports = gql`
     scalar Date
 
     """ TypeDefs User Defined Types """
-
-    type User {
-        id: ID!
-        belongsTo: ID!
-        first: String!
-        last: String!
-        accessLvl: String!
-        cards: [Card]
-    }
-
+    ${ userTypeDef }
+    ${ spaceTypeDef }
     ${ cardTypeDef }
 
     type CardMeta {
         details: String
         questions: String
         notes: String
-    }
-
-    type Space {
-        id: ID!
-        name: String!
-        numCards: Int
-        createdAt: Date!
-        lastModified: Date!
-        permissionLevels: String
-        cards: [ID]
     }
 
     """ Unique input types """
@@ -57,18 +41,14 @@ module.exports = gql`
     """ CRUD Types """
 
     type Query {
-        getSpace(id: ID): Space
-        getSpaces(id: ID): [Space]
-        getUser(id: ID): User
-        getUsers(ids: [ID]): [User]
+        ${ userQueries }
+        ${ spaceQueries }
         ${ cardQueries }
     }
 
     type Mutation {
-        createSpace(name: String): Space
-        updateSpace(spaceId: ID!, name: String!): Space
-        deleteSpace(spaceId: ID!): Space
-        addSpaceUser(first: String!, last:String!, email: String!, accessLvl: String): User
+        ${ userMutations }
+        ${ spaceMutations }
         ${ cardMutations }
     }
 `;

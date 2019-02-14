@@ -2,7 +2,6 @@
 //  Please do not change this file, as it is generated and scaffolding will break
 
 /** Resolver Imports: **/
-
 const cardQueries = require('./cardQueries');
 const spaceQueries = require('./spaceQueries');
 const userQueries = require('./userQueries');

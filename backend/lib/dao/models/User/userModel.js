@@ -1,43 +1,13 @@
-const { Schema, model } = require('mongoose');
+// Basic Imports
+const { model } = require('mongoose');
+const { userSchema } = require('./userSchema');
+
+/* Additional Imports */
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const isJesting = process.env.JWT_SALT ? false : true; // Determines if testing or not
-const permLevels = require('../../constants/access');
 
-/**
- * 
- */
-
-const usersSchema = {
-    name: {
-        first: { type: String, required: true },
-        last: { type: String, required: true },
-        full: {type: String, required: false}
-    },
-    emails:[ 
-        new Schema({ 
-            email: { type: String, required: true, unique: true, match: /([a-zA-z]|(\.|\-|\_))+\@[a-zA-z]+\.(com|net|org)$/ }, verified: { type: Boolean, default: false } 
-        }, { _id: false })
-    ],
-    password: { type: String, required: true },
-    memberships: [ 
-        {
-            spaceId: { type: Schema.Types.ObjectId, required: true },
-            spaceName: {type: String, required: true, unique: true},
-            accessLvl: { type: Number, required: true }
-        }
-    ],
-    cards: [
-        { cardId: Schema.Types.ObjectId, posted: Boolean }
-    ],
-    auth: { 
-        token: { type: String, required: true, unique: true },
-        expires: {type: Number, required: true},
-        expired: { type: Boolean, required: true } 
-    }
-}
-
-/************ Helper Functions ***************/
+/* Helper Functions */
 
 async function hashPasswd(password) {
     return await new Promise((resolve, reject) => {
@@ -52,30 +22,27 @@ const _MinutesFromNow = (numOfMinutes) => {
     return Math.floor(Date.now() / 1000) + 60 * numOfMinutes;
 }
 
-/**
- * Mongoose User docuemt middlewares
- */
-const UsersSchema = new Schema(usersSchema, { timestamps: true });
 
-// Hashes password, and replaces it on submission
-UsersSchema.pre('save', async function(next) {
+/* User Middlewares */
+
+userSchema.pre('save', async function(next) {
     let user = this;
     user.password = await hashPasswd(user.password);
     
     next();
 })
 
+/* DAO Class Definition */
 
-/**
- * Definition of User Data Access Object
- * Will have wrappers for the each CRUD necessary
- * This model is used to abstract data access away from endpoints.
- * 
- * This is ideal, as it provides a way to easily move this functionality
- * to a Microservice w/ any other backend
- */
-function UsersDAO() {
-    this.schema = model('Users', UsersSchema);
+function UserDAO() {
+    this.schema = model('User', userSchema);
+}
+
+
+/* Operations Definitions */
+
+UserDAO.prototype.get = async function( args ) {
+
 }
 
 /**
@@ -89,7 +56,7 @@ function UsersDAO() {
  *  {*} userRegistrationData: object with user details about who is being created
  *          defaults shoule be to only have username/passwd 
  */
-UsersDAO.prototype.registerUser = async function(userRegistrationData) {
+UserDAO.prototype.create = async function( userRegistrationData ) {
     // Filters emails
     try {
         const { first, last, email, password } = userRegistrationData; // gets necessary form data
@@ -128,11 +95,22 @@ UsersDAO.prototype.registerUser = async function(userRegistrationData) {
     }
 }
 
+UserDAO.prototype.update = async function( args ) {
+
+}
+
+UserDAO.prototype.delete = async function( args ){
+
+}
+
+
+/* Additional Functions */
+
 /**
  * Function returns a valid JWT, after saving it to the most recent token used
  * 
  */
-UsersDAO.prototype.loginUser = async function(userLoginData){
+UserDAO.prototype.login = async function( userLoginData ){
     try {
         const { email, password } = userLoginData; // Should only have these two fields
         
@@ -144,6 +122,9 @@ UsersDAO.prototype.loginUser = async function(userLoginData){
                 }
             }
         });
+        if( !user ) {
+            throw new Error(`User Returned null`)
+        }
 
         // Password validation
         // if valid => create new token & update user model with new token 
@@ -171,12 +152,13 @@ UsersDAO.prototype.loginUser = async function(userLoginData){
             return newToken;
         }
 
-        throw new Error('User has wrong credentials');
+        throw new Error(`Error Authenticating User`);
     } catch(err) {
-        throw new Error(`Error authenticating user`);
+        throw err;
     }
 }
 
+
 module.exports = {
-    UsersDAO: new UsersDAO()
+    UserDAO: new UserDAO()
 }

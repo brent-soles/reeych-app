@@ -1,18 +1,16 @@
-const { Schema, model } = require('mongoose');
+// Basic Imports
+const { model } = require('mongoose');
+const { spaceSchema } = require('./spaceSchema')
 
-const spacesSchema = {
-    name: {type: String, required: true},
-    numCards: Number,
-    createdAt: {type: Date, default: Date.now},
-    lastModified: Date,
-    cards: [Schema.Types.ObjectId]
+
+/* DAO Class Definition */
+function SpaceDAO() {
+    this.schema = model('Space', spaceSchema);
 }
 
-function SpacesDAO() {
-    this.schema = model('Spaces', new Schema(spacesSchema));
-}
 
-SpacesDAO.prototype.get = async function({ id }){
+/* Operation Definitions */
+SpaceDAO.prototype.get = async function( args ) {
     try {
         const space = await this.schema.findOne({_id: id});
         return space;
@@ -21,7 +19,7 @@ SpacesDAO.prototype.get = async function({ id }){
     }
 }
 
-SpacesDAO.prototype.create = async function({ name }){
+SpaceDAO.prototype.create = async function( args ) {
     //takes name, tried to save to db
     name = name.toLowerCase();
     const space = new this.schema({
@@ -50,9 +48,7 @@ SpacesDAO.prototype.create = async function({ name }){
     }
 }
 
-
-SpacesDAO.prototype.update = async function({id, name}){
-
+SpaceDAO.prototype.update = async function( args ) {
     try {
         const space = await this.schema.findOneAndUpdate({ _id: id }, 
             { 
@@ -67,8 +63,7 @@ SpacesDAO.prototype.update = async function({id, name}){
     }
 }
 
-SpacesDAO.prototype.delete = async function({id}){
-    
+SpaceDAO.prototype.delete = async function( args ){
     try {
         const space = await this.schema.findOneAndDelete({ _id: id });
         return space;
@@ -77,9 +72,10 @@ SpacesDAO.prototype.delete = async function({id}){
     }
 }
 
-/** Card specific operations */
 
-SpacesDAO.prototype.addCard = async function({ spaceId, cardId }){
+/* Additional Functions */
+
+SpaceDAO.prototype.addCard = async function({ spaceId, cardId }){
     try {
         const space = await this.schema.findOneAndUpdate({ _id: spaceId },
             {
@@ -99,7 +95,7 @@ SpacesDAO.prototype.addCard = async function({ spaceId, cardId }){
     }
 }
 
-SpacesDAO.prototype.deleteCard = async function({ spaceId, cardId }){
+SpaceDAO.prototype.deleteCard = async function({ spaceId, cardId }){
     //TODO: Write validation
     //Assume user is perfect... for now...
     try {
@@ -120,8 +116,6 @@ SpacesDAO.prototype.deleteCard = async function({ spaceId, cardId }){
     }
 }
 
-
 module.exports = {
-    SpacesDAO: new SpacesDAO(),
-    spacesSchema
+    SpaceDAO: new SpaceDAO()
 }

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const mockingoose = require('mockingoose').default;
 require('dotenv').config({path: '../../../dev.server.env'})
 const jwt = require('jsonwebtoken')
-const { UsersDAO } = require('../models/Users');
+const { UserDAO } = require('../User/userModel');
 
 /*************** Helper Functions ***************/
 
@@ -28,6 +28,7 @@ const _userIdGen = () => {
     let id = mongoose.Types.ObjectId().toString().split(''); // Splits the string into an array to operate on
     const lastCharCode = id[id.length - 1].charCodeAt(0); // MongoId last char character
     const secondToLastCode = id[id.length - 2].charCodeAt(0);
+    
     // Base case: Next one will be increment in order
     if(String.fromCharCode(lastCharCode) === 'f') {
         // And second to last is '...ff'
@@ -45,6 +46,7 @@ const _userIdGen = () => {
 }
 
 /*************** User Data definitions ***************/
+
 
 const _validFormData = {
     first: 'Joe',
@@ -103,33 +105,30 @@ const _usersSchemaReturnedOnCreate = {
 
 /*************** TESTS ***************/
 
-// describe('User should have hashed password', () => {
-    
-// })
 
 describe('User registration', () => {
     // First, check to see if a user registers
     it('Returns JWT, given valid form data', () => {
-        mockingoose.Users.toReturn(_usersSchemaReturnedOnCreate, 'save');
-        return UsersDAO.registerUser(_validFormData).then((result) => {
+        mockingoose.User.toReturn(_usersSchemaReturnedOnCreate, 'save');
+        return UserDAO.create(_validFormData).then((result) => {
             expect(result).toEqual(initToken); // Checks to see if JWT is valid
         })
     })
 
     // Tests to see if validation is working
     it('Should throw validation error defined in User Schema with: Omission of email', async () => {
-        mockingoose.Users.toReturn(_usersSchemaReturnedOnCreate, 'save');
+        mockingoose.User.toReturn(_usersSchemaReturnedOnCreate, 'save');
         try {
-            await UsersDAO.registerUser(_invalidFormDataNoEmail);
+            await UserDAO.create(_invalidFormDataNoEmail);
         } catch(err) {
             expect(err).toEqual(new Error(`Error creating user`));
         }
     })
 
     it('Should throw validation error defined in User Schema with: Wrong email format (no \.com)', async () => {
-        mockingoose.Users.toReturn(_usersSchemaReturnedOnCreate, 'save');
+        mockingoose.User.toReturn(_usersSchemaReturnedOnCreate, 'save');
         try {
-            const newUserToken = await UsersDAO.registerUser(_invalidFormDataEmailFormat1);
+            const newUserToken = await UserDAO.create(_invalidFormDataEmailFormat1);
             return newUserToken;
         } catch(err) {
             expect(err).toEqual(new Error(`Error creating user`));
@@ -137,22 +136,22 @@ describe('User registration', () => {
     })
 
     it('Should throw validation error defined in User Schema with: Wrong email format (space in email)', async () => {
-        mockingoose.Users.toReturn(_usersSchemaReturnedOnCreate, 'save');
+        mockingoose.User.toReturn(_usersSchemaReturnedOnCreate, 'save');
         try {
-            await UsersDAO.registerUser(_invalidFormDataEmailFormat2);
+            await UserDAO.create(_invalidFormDataEmailFormat2);
         } catch(err) {
             expect(err).toEqual(new Error(`Error creating user`));
         }
     })
 })
 
+
 describe('User Login', () => {
     it('Returns JWT, given valid form data', async () => {
-        mockingoose.Users
-            .toReturn(_usersSchemaReturnedOnCreate, 'findOne')
-            .toReturn(_usersSchemaReturnedOnCreate, 'findOneAndUpdate');
+        mockingoose.User
+            .toReturn(_usersSchemaReturnedOnCreate, 'findOne');
 
-        return await UsersDAO.loginUser(_validFormData).then((result) => {
+        return await UserDAO.login(_validFormData).then((result) => {
             const { email, exp, iat, memberships, name } = jwt.verify(result, 'jestTest');
 
             expect(email).toEqual(_validFormData.email);
@@ -163,11 +162,9 @@ describe('User Login', () => {
     })
 
     it('Returns updated JWT, given valid form data', async () => {
-        mockingoose.Users
-            .toReturn(_usersSchemaReturnedOnCreate, 'findOne')
-            .toReturn(_usersSchemaReturnedOnCreate, 'findOneAndUpdate');
+        mockingoose.User.toReturn(_usersSchemaReturnedOnCreate, 'findOne');
 
-        return await UsersDAO.loginUser(_validFormData).then((result) => {
+        return await UserDAO.login(_validFormData).then((result) => {
             const { email, exp, iat, memberships, name } = jwt.verify(result, 'jestTest');
             const oldToken = jwt.decode(initToken, 'jestTest');
             
@@ -182,11 +179,11 @@ describe('User Login', () => {
     })
 
     it('Throws error, given wrong credentials', async () => {
-        mockingoose.Users.toReturn(_usersSchemaReturnedOnCreate, 'findOne');
+        mockingoose.User.toReturn(_usersSchemaReturnedOnCreate, 'findOne');
         try {
-            await UsersDAO.loginUser({ ..._validFormData, password: "wr0ngp4ssw0rd" });
+            await UserDAO.login({ ..._validFormData, password: "wr0ngp4ssw0rd" });
         } catch (err) {
-            expect(err).toEqual(new Error('Error authenticating user'))
+            expect(err).toEqual(new Error('Error Authenticating User'))
         }
     })
 })

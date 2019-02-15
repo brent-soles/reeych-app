@@ -22,10 +22,11 @@ module.exports = {
     userQueries: `
         getUser(id: ID): User
         getUsers(id: ID): [User]
-    `, // End cardQueries
+    `, // End userQueries
     userMutations: `
-        createUser(name: String): User
+        createUser(first: String, last: String, email: String, password: String): Status
         updateUser(id: ID!, name: String!): User
         deleteUser(id: ID!): User
-    ` // End cardMutations
+        loginUser(email: String, password: String): Status
+    ` // End userMutations
 }

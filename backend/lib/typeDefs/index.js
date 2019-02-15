@@ -26,6 +26,11 @@ module.exports = gql`
         notes: String
     }
 
+    type Status {
+        code: Int
+        message: String
+    }
+
     """ Unique input types """
 
     input CardMetaData {

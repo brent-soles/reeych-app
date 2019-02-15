@@ -1,4 +1,10 @@
+
 const { Types } = require('mongoose');
+
+/* DAO Access Objects */
+const { SpaceDAO } = require('./Space/spaceModel');
+const { CardDAO } = require('./Card/cardModel');
+const { UserDAO } = require('./User/userModel');
 const { SpacesDAO } = require('./Spaces');
 const { CardsDAO } = require('./Cards');
 
@@ -13,11 +19,23 @@ ObjectId.prototype.valueOf = function() {
 module.exports = {
     models: [
         {
-            name: "SpacesDAO",
+            name: 'Space',
+            daoObj: SpaceDAO
+        },
+        {
+            name: 'Card',
+            daoObj: CardDAO
+        },
+        {
+            name: 'User',
+            daoObj: UserDAO
+        },
+        {
+            name: 'Spaces',
             daoObj: SpacesDAO
         },
         {
-            name: "CardsDAO",
+            name: 'Cards',
             daoObj: CardsDAO
         }
     ]

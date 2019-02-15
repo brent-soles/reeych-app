@@ -5,8 +5,6 @@ require('dotenv').config({path: './dev.server.env'})
 const Koa = require('koa');
 const static = require('koa-static');
 const Router = require('koa-router');
-const send = require('koa-send');
-const path = require('path');
 const app = new Koa();
 const router = new Router();
 const { ApolloServer} = require('apollo-server-koa');
@@ -22,9 +20,9 @@ const bodyParser = require('koa-bodyparser');
 const jwt = require('jsonwebtoken');
 
 app.keys=[process.env.COOKIE_KEY]
+
 app.use(bodyParser());
 app.use(helmet());
-
 app.use(async (ctx, next) => {
 
     // FOR TESTING
@@ -41,25 +39,13 @@ try{
     const { applyPassportAuth, strategies } = require('./lib/auth');
     applyPassportAuth(app, strategies);
 
-    /** DB Connection */
-    const { applyDbToCtx } = require('./lib/dao');
-    const { models } = require('./lib/dao/models');
-    const dbconfig = {
-        url: process.env.DB_URL,
-        models
-    }
-    // Inits the db, then attches dao object to
-    // request context
-    const db = applyDbToCtx({
-        app,
-        config: dbconfig
-    });
+    // DAO initialization
+    const dao = require('./lib/dao');
+    // Initializes db, connects Models to DAO
+    // Attaches DAO to ctx
+    dao.init( {app });
 
-    if(!db){
-        throw new Error(`Database error with applying to context: ${db}`)
-    }
-
-    /** Server initialization */
+    // Server initialization
     const server = new ApolloServer({ 
         typeDefs, 
         resolvers,

@@ -8,10 +8,11 @@
  * @param {*} ctx => request context (ctx) 
  * @param {*} info 
  */
-const getCard = async (_, args, ctx, info) => {
-    const { CardsDAO } = ctx.dao;
+const getCard = async (_, args, { dao, cookies }, info) => {
+    const { Card } = dao;
+    console.log(cookies.get('reeych'))
     try{
-        const card = await CardsDAO.get(args);
+        const card = await Card.get(args);
         return card;
     } catch(err) {
         console.log(err)
@@ -27,10 +28,10 @@ const getCard = async (_, args, ctx, info) => {
  * @param {*} info 
  */
 const getCards = async (_, args, ctx, info) => {
-    const { CardsDAO } = ctx.dao;
+    const { Card } = ctx.dao;
     try {
         // Grabs cards and number of cards for data
-        const cards = await CardsDAO.getAll(args);
+        const cards = await Card.getAll(args);
         return cards;
     } catch(err) {
         console.log(err);

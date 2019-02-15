@@ -8,9 +8,9 @@
  * @param {*} info 
  */
 const createSpace = async (_, args, { dao }, info) => {
-    const { SpacesDAO } = dao; //grabs DAO from db ctx
+    const { Space } = dao; //grabs DAO from db ctx
     try{
-        const space = await SpacesDAO.create(args);
+        const space = await Space.create(args);
         return space;
     } catch(err) {
         console.log(`createSpace: ${err}`);
@@ -29,9 +29,9 @@ const createSpace = async (_, args, { dao }, info) => {
  * @param {*} info 
  */
 const updateSpace = async (_, args, { dao }, info) => {
-    const { SpacesDAO } = dao;
+    const { Space } = dao;
     try {
-        const space = SpacesDAO.update(args);
+        const space = Space.update(args);
         return space;
     } catch(err) {
         console.log(`updateSpace: ${err}`);
@@ -46,13 +46,13 @@ const updateSpace = async (_, args, { dao }, info) => {
  * @param {*} info 
  */
 const deleteSpace = async (_, args, { dao }, info) => {
-    const { SpacesDAO, CardsDAO } = dao;
+    const { Space, Card } = dao;
     try {
-        const space = await SpacesDAO.delete(args);
+        const space = await Space.delete(args);
         // Check to see if cards are not null
         if(space.cards){
             space.cards.forEach(cardId => {
-                CardsDAO.delete({ id: cardId })
+                Card.delete({ id: cardId })
             })
         }
         return space;

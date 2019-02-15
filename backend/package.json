@@ -32,7 +32,8 @@
     "gql:init": "hygen gql init",
     "gql:scaffold": "hygen gql scaffold --type all",
     "gql:scaffoldQuery": "hygen gql scaffold --type query",
-    "gql:scaffoldMutation": "hygen gql scaffold --type mutation"
+    "gql:scaffoldMutation": "hygen gql scaffold --type mutation",
+    "dao:scaffoldModel": "hygen dao newModel"
   },
   "devDependencies": {
     "jest": "^23.6.0",

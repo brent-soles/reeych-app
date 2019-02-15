@@ -17,15 +17,15 @@
  * @param {*} info 
  */
 const createCard = async (_, args, { dao }, info) => {
-    //const { Spaces, Cards } = dao; //grabs model from db ctx
-    const { SpacesDAO, CardsDAO } = dao;
+    //const { Space, Card } = dao; //grabs model from db ctx
+    const { Space, Card } = dao;
     //TODO: Write validation
     //Assume user is perfect... for now...
     try {
-        const card = await CardsDAO.create(args);
+        const card = await Card.create(args);
         // Make belongsTo readable
         card.spaceId = card.spaceId.valueOf();
-        await SpacesDAO.addCard({
+        await Space.addCard({
             spaceId: card.spaceId,
             cardId: card._id
         })
@@ -45,10 +45,10 @@ const createCard = async (_, args, { dao }, info) => {
  * @param {*} info 
  */
 const updateCard = async (_, args, { dao }, info) => {
-    const { CardsDAO } = dao;
+    const { Card } = dao;
     // TODO: Data validation
     try {
-        const card = await CardsDAO.update(args);
+        const card = await Card.update(args);
         return card;
     } catch (err) {
         throw err;
@@ -66,13 +66,13 @@ const updateCard = async (_, args, { dao }, info) => {
  * @param {*} info 
  */
 const deleteCard = async (_, args, { dao }, info) => {
-    const { SpacesDAO, CardsDAO } = dao; //grabs model from db ctx
+    const { Space, Card } = dao; //grabs model from db ctx
     //TODO: Write validation
     //Assume user is perfect... for now...
     try {
-        const card = await CardsDAO.delete(args);
+        const card = await Card.delete(args);
         card.belongsTo = card.belongsTo.valueOf();
-        await SpacesDAO.deleteCard({
+        await Space.deleteCard({
             spaceId: card.belongsTo,
             cardId: card._id
         });

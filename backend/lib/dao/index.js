@@ -1,64 +1,48 @@
 /** Imports */
 const mongoose = require('mongoose');
 
+/* Models Import */
+const { models } = require('./models');
+
 /**
  * 
  * @param {*} object
- *  @param {array} models = models object with the form of:
+ * @param {array} models = models object with the form of:
  *      [{
  *          name: String, // Name of acces object
  *          daoObj: Object // Mongoose model object w/ connection to db
  *      },...]
  */
-const initSchema = ({ models }) => {
+const attachModels = ({ models, dao }) => {
     try{
-        let dao = {};
-        
+        if(!dao){
+            throw new Error('TypeErro: Cannot have null or undefined dao')
+        }
         // Massages models and assigns dao object
         models.forEach((obj) => {
             const { name, daoObj } = obj;
             // Better way to name ?
+            // Current name is <modelName>DAO
             dao[name] = daoObj;
         });
-
-        return dao;
     } catch (err) {
-        throw new Error(`${err}`)
+        throw new Error(err);
     }
-}
-
-
-// Inits database, then attaches dao object to ctx
-const applyDbToCtx = ({ app, config }) => {
-    if(!app || !config) {
-        throw new Error(`Cannot pass a null app or config`);
-    }
-
-    // Destruct params from config
-    const { url, models } = config;
-    
-    if(!url || !models){
-        throw new Error(`url or models parameter cannot be of type: null`);
-    }
-
-    try {
-        let db = mongoose.connect(url, { useNewUrlParser: true });
-        const daoModels = initSchema({ models }); // extracts models & formats to callable object
-
-        if(!daoModels){
-            throw new Error(`Models are invalid`);
-        }
-
-        // Attaches dao to app context prototype
-        app.context.dao = daoModels;
-        return db;
-    } catch (err) {
-        throw new Error(`Cannot init db: ${err}`);
-    }
-
-
 }
 
 module.exports = {
-    applyDbToCtx
+    // Returns function to pass initialize and attach dao object to context
+    init: (function(models, url){
+        // Connects to MongoInstance
+        // Attaches dao object to ctx prototype context
+        try {
+            mongoose.connect(url, { useNewUrlParser: true });
+            return function({ app }) {
+                app.context.dao = {};
+                attachModels({ models, dao: app.context.dao });
+            }
+        } catch (err) {
+            throw new Error(err);
+        }
+    })(models, process.env.DB_URL)
 };

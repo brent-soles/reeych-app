@@ -5,8 +5,7 @@ const { Types } = require('mongoose');
 const { SpaceDAO } = require('./Space/spaceModel');
 const { CardDAO } = require('./Card/cardModel');
 const { UserDAO } = require('./User/userModel');
-const { SpacesDAO } = require('./Spaces');
-const { CardsDAO } = require('./Cards');
+
 
 /**
  * For interoperability with MongoDB ID's
@@ -29,14 +28,6 @@ module.exports = {
         {
             name: 'User',
             daoObj: UserDAO
-        },
-        {
-            name: 'Spaces',
-            daoObj: SpacesDAO
-        },
-        {
-            name: 'Cards',
-            daoObj: CardsDAO
         }
     ]
 }

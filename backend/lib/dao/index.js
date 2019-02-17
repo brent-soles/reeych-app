@@ -9,7 +9,7 @@ const { models } = require('./models');
  * @param {*} object
  * @param {array} models = models object with the form of:
  *      [{
- *          name: String, // Name of acces object
+ *          name: String, // Name of access object
  *          daoObj: Object // Mongoose model object w/ connection to db
  *      },...]
  */
@@ -22,7 +22,8 @@ const attachModels = ({ models, dao }) => {
         models.forEach((obj) => {
             const { name, daoObj } = obj;
             // Better way to name ?
-            // Current name is <modelName>DAO
+            // Current name is <modelName>
+            // Access for a User would then be: dao.User.<function>(args)
             dao[name] = daoObj;
         });
     } catch (err) {
@@ -34,7 +35,7 @@ module.exports = {
     // Returns function to pass initialize and attach dao object to context
     init: (function(models, url){
         // Connects to MongoInstance
-        // Attaches dao object to ctx prototype context
+        // Inits dao object then applies dao to ctx prototype, context
         try {
             mongoose.connect(url, { useNewUrlParser: true });
             return function({ app }) {

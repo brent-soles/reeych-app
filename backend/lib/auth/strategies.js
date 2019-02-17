@@ -15,12 +15,12 @@ const jwt = require('jsonwebtoken');
 const stratOptions = {
     jwtFromRequest: (ctx) => {
         // tokenPrim == undecrypted token
-        const tokenPrim = ctx.cookies.get('reeych-auth');
+        const tokenPrim = ctx.cookies.get('reeych');
         // Check to see if token is falsy
         if(!tokenPrim){
             // Sets cookie to null for any future requests
-            ctx.cookies.set('reeych-auth', null, {
-                signed: true
+            ctx.cookies.set('reeych', null, {
+                signed: process.env.NODE_ENV !== 'production' ? false : true
             })
             return null;
         }

@@ -8,6 +8,7 @@
     "@reach/router": "^1.2.1",
     "apollo-boost": "^0.1.22",
     "apollo-client": "^2.5.0-alpha.2",
+    "cookies-js": "^1.2.3",
     "emotion": "^10.0.5",
     "graphql": "^14.0.2",
     "graphql-tag": "^2.10.0",
@@ -21,6 +22,7 @@
     "react-spring": "^7.2.5",
     "redux": "^4.0.1"
   },
+  "proxy": "http://localhost:7000",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

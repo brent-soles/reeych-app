@@ -23,16 +23,24 @@ app.keys=[process.env.COOKIE_KEY]
 
 app.use(bodyParser());
 app.use(helmet());
-app.use(async (ctx, next) => {
+if(process.env.NODE_ENV === "development" ){
+    app.use(async (ctx, next) => {
 
-    // FOR TESTING
-    if(ctx.path === '/gettoken'){
-        ctx.cookies.set('reeych-auth', jwt.sign({ accessLvl: `admin` }, process.env.JWT_SALT));
-        ctx.redirect('/');
-        return;
-    }
-    return next();
-});
+        // FOR TESTING
+        if(ctx.path === '/gettoken'){
+            ctx.cookies.set('reeych-auth', jwt.sign({ accessLvl: `admin` }, process.env.JWT_SALT));
+            ctx.redirect('/');
+            ctx.status = 200;
+            return;
+        } else if(ctx.path === '/cookieTest'){
+            console.log("SENT")
+            console.log(ctx.cookies.get('reeych-auth'));
+            ctx.status = 200;
+            return;
+        }
+        return next();
+    });
+}
 
 try{
     // Adds auth layer to ctx
@@ -56,18 +64,18 @@ try{
 
     // Adds a layer of authentication in order to GET UI
     // TODO: Split this into a GET for a route
-    app.use(async (ctx, next) => {
-        const { passport } = ctx;
-        await passport.authenticate('jwt', {session: false}, async (err, { authToken }, info) => {
-            console.log(authToken);
-            if(authToken.accessLvl === 'admin'){
-                console.log('sending/authing');
-                return next();
-            }
-            return;
-        })(ctx, next);
-    });
-    app.use(static('app'));
+    // app.use(async (ctx, next) => {
+    //     const { passport } = ctx;
+    //     await passport.authenticate('jwt', {session: false}, async (err, { authToken }, info) => {
+    //         console.log(authToken);
+    //         if(authToken.accessLvl === 'admin'){
+    //             console.log('sending/authing');
+    //             return next();
+    //         }
+    //         return;
+    //     })(ctx, next);
+    // });
+    // app.use(static('app'));
 
     /** Let the serving... begin! */
     app.listen({ port: 7000 }, () => {

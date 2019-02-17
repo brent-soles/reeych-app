@@ -19,19 +19,21 @@ const jwt = require('jsonwebtoken');
  * @param {*} { dao } => data access object. This destructs from the ctx object
  * @param {*} info 
  */
-const createUser = async (_, args, { dao, cookies }, info) => {
-    const { User } = dao;
+const createUser = async (_, args, ctx, info) => {
+    const { User } = ctx.dao;
     try{
         const userToken = await User.create(args);
-        cookies.set('reeych', userToken, { httpOnly: false });
+        ctx.cookies.set('reeych', userToken, { httpOnly: false });
+        ctx.status = 201;
         return {
-            code: 200,
-            message: "Success"
+            code: 201,
+            message: "Registration Success"
         }
     } catch(err){
+        ctx.status = 400;
         return {
-            code: -1,
-            message: "Fail"
+            code: 400,
+            message: "Registration Fail"
         }
     }
 }
@@ -51,12 +53,12 @@ const loginUser = async (_, args, { dao, cookies }, info ) => {
         cookies.set('reeych', userToken, { httpOnly: false });
         return {
             code: 200,
-            message: "Success"
+            message: "Login Success"
         }
     } catch (err) {
         return {
-            code: -1,
-            message: "Fail"
+            code: 401,
+            message: "Login Failed"
         }
     }
 }

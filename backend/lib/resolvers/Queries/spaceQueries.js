@@ -9,9 +9,9 @@
  * @param {*} info 
  */
 const getSpace = async (_, args, ctx, info) => {
-    const { Spaces } = ctx.dao;
+    const { Space } = ctx.dao;
     try{
-        let space = await Spaces.get(args);
+        let space = await Space.get(args);
         return space;
     } catch(err) {
         console.log(err)

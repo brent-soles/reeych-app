@@ -1,68 +1,61 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Redirect } from '@reach/router';
-import Cookies from 'cookies-js';
 
 // Custom Components
+import { AuthContext } from './AuthContext';
 import { PrimaryButton } from '../SharedComponents/Styles/StyledButtons';
 
-const _onSubmit = ( { email, password } ) => {
-    console.log(`Login email: ${email}`);
-    console.log(`Login password: ${password}`)
-}
-
-const defaultState = {
-    email: '', 
-    password: ''
-}
-
 function Login(){
-    const [state, setState] = useState(defaultState);
-    const [isAuthed, setIsAuthed] = useState({
-        status: false,
-        id: -1
-    });
-    
-    if(isAuthed.status){
-        // return <h1>AUTHED</h1>
-        return <Redirect to={`app/${isAuthed.id}`} noThrow />
-    } else {
-        return (
-            <form id="reeych-login" onSubmit={ async (e) => {
-                e.preventDefault();
-                _onSubmit(state);
-                try{
-                    const res = await fetch(`/gettoken`);
-                    if(res.status === 200){
-                        console.log(Cookies.get('reeych-auth'))
-                        setIsAuthed({ status: true, id: res.status });
-                    }
-                    console.log(res);
-                } catch(err) {
+  // Get's auth context, and method to update Auth stats upon successful login
+  // Ref: src/lib/hook/useStatefulContext.js to see how ctx methods are applied
+  const { AuthenticationCtx, setAuthenticationCtx } = useContext(AuthContext);
+  const { isAuthed, authId } = AuthenticationCtx;
 
-                }
-            }}>
-                <label>
-                    Email:
-                    <input 
-                        name="email" 
-                        type="text" 
-                        value={state.email} 
-                        onChange={ e => setState({ ...state, [e.target.name]: e.target.value }) } 
-                    />
-                </label>
-                <label>
-                    Password:
-                    <input 
-                        name="password"
-                        type="password"
-                        value={state.password}
-                        onChange={ e => setState({ ...state, [e.target.name]: e.target.value }) } 
-                    />
-                </label>
-                <PrimaryButton type="submit" >Submit</PrimaryButton>
-            </form>
-        )
-    }
+  // Keep tabs on current state form
+  // TODO: add validation of fields
+  const [ formData, setFormData ] = useState({
+    email: '',
+    passwd: ''
+  });
+
+  // If user has been authenticated redirect to app
+  // app/* is a protected route
+  // If user has not been authenticated yet, keep showing form
+  if(isAuthed){
+    return <Redirect to={`app/${authId}`} noThrow />
+  } else {
+    const { email, passwd } = formData;
+    return (
+      <form id="reeych-login" onSubmit={ async (e) => {
+        e.preventDefault();
+          try{
+
+            // Upon successful login, set auth flag to true and udpate ID
+            // Id is used to verifiy upon further requests
+            setAuthenticationCtx({...AuthenticationCtx, isAuthed: true });
+          } catch(err) {
+            throw new Error(`We are having trouble connecting`);
+          }
+        }}>
+        {/* Begin Form */}
+        <label htmlFor="email">
+          Email:
+          <input name="email" type="text" 
+            value={email} 
+            onChange={e => setFormData({ ...formData, email: e.target.value })} 
+          />
+        </label>
+        <label htmlFor="email">
+          Password:
+          <input name= "passwd" type="password" 
+            value={passwd} 
+            onChange={e => setFormData({ ...formData, passwd: e.target.value })} 
+          />
+        </label>
+        <PrimaryButton type="submit" >Submit</PrimaryButton>
+      </form>
+    )
+  }
 }
 
 export default Login;

@@ -34,11 +34,11 @@ import React from 'react';
 import Profile from './Profile';
 
 function ReeychApp({ id }){
-    return(
-        <>
-            <Profile id={id} />
-        </>
-    )
+  return(
+    <div>
+      <Profile id={id} />
+    </div>
+  )
 }
 
 export default ReeychApp;

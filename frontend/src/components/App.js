@@ -8,9 +8,9 @@ import ReeychApp from './ReeychApp/ReeychApp';
 import { AuthContext } from './Authentication/AuthContext';
 
 function App(){
-  const { AuthenticationCtx } = useContext(AuthContext);
-  const { isAuthed, authId } = AuthenticationCtx;
-  console.log('inApp', isAuthed)
+  const { authCtx } = useContext(AuthContext);
+  const { isAuthed, authId } = authCtx;
+  console.log('inApp', authCtx);
   return (
     <div>
         {isAuthed ? 
@@ -23,7 +23,7 @@ function App(){
         </nav>}
         
         <Router basepath="/">
-            <ProtectedRoute path="app/:id" isAuthed={isAuthed} component={ReeychApp}/>
+            <ProtectedRoute path="app/:id" component={ReeychApp}/>
             <AuthForms path="auth/*"/>
             <Redirect from={window.location.pathname} to={isAuthed ? `/app/${authId}` : "auth/login"} default noThrow />
         </Router>

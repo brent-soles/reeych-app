@@ -3,13 +3,11 @@ import { Redirect } from '@reach/router';
 
 import { AuthContext } from '../../Authentication/AuthContext';
 
-function ProtectedRoute( {component: Component, ...rest } ){
+function ProtectedRoute(props){
   const { authCtx: { isAuthed } } = useContext(AuthContext);
   
-  console.log('in pr:', isAuthed);
-
-  //console.log('pr is Authed & rest', isAuthed, {...rest});
-  return isAuthed ? <Component {...rest} /> : <Redirect to="/auth" noThrow />;
+  console.log('in pr:', props.children);
+  return isAuthed ? props.children : <Redirect to="/auth" noThrow />;
 }
 
 export default ProtectedRoute;

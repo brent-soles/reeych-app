@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 
 export const ALL_CARDS = gql`
     query getCards($id: ID!){
-        cards(id: $id){
+        getCards(id: $id){
             id,
             title,
             author,

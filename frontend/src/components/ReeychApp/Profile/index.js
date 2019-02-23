@@ -1,8 +1,5 @@
-import React, { useContext } from 'react';
-import { Redirect } from '@reach/router';
+import React from 'react';
 
-//import UserInfo from './UserInfo';
-import { AuthContext } from '../../Authentication/AuthContext';
 import Avatar from './Avatar';
 
 /*** Mock User Data */
@@ -31,24 +28,9 @@ const userMockData = {
 
 /*** End Mock User Data */
 
-function Profile({ id }){
-  const { authCtx, setAuthCtx } = useContext(AuthContext);
-
+function Profile(){
   
   return <Avatar {...userMockData} />;
-
-  if(id !== authCtx.id.toString()){
-    setAuthCtx({...authCtx, isAuthed: false});
-    return null;
-  } else {
-    console.log('About')
-    return (
-      <div>
-        {/* <h1>Hey, your logged in as {id}</h1> */}
-        <Avatar {...userMockData} />
-      </div>
-    )
-  }
 }
 
 export default Profile;

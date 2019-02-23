@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { Redirect } from '@reach/router';
-import { SECONDARY } from '../../SharedComponents/Styles/Colors';
+import { Link } from '@reach/router';
 import styled from '@emotion/styled';
-
+import { SECONDARY } from '../../SharedComponents/Styles/Colors';
 import headShot from './brent-mq.jpg'
 
 const xySize = 8;
@@ -29,18 +28,12 @@ function Img ( props ) {
 
 function Avatar({ name, emails, memberships, cards }) {
 
-  // if(typeof props !== typeof {}){
-  //   return null;
-  // }
   const [showDetails, setShowDetails] = useState(false);
-  const [redirect, setRedirect] = useState(false);
-  console.log('In avatar')
-
   const AvatarStyle = styled.div`
-    background-color: rgba(0, 0, 0, .3);
+    background-color: ${({hideBg}) => hideBg ? 'transparent' : 'rgba(0, 0, 0, .3)'};
     height: 100%;
     display: grid;
-    position: absolute;
+    position: fixed;
     right: 0;
     min-width: 30rem;
     max-width:40rem;
@@ -48,38 +41,31 @@ function Avatar({ name, emails, memberships, cards }) {
     text-align: center;
   `;
 
-  const toSettings = () => setRedirect(true);
-  if(redirect){
-    return <Redirect to={`app/123/settings/`} noThrow />
-  } else {
-    return (
-      <AvatarStyle>
-        <Img src={headShot} onClick={() => setShowDetails(!showDetails)}/>
-        {showDetails && <>
-          <h1>{name.full}</h1>
-          <ul>
-            {emails.map((el, i) => 
-              el.primary ? <strong><li key={i}>{el.email}</li></strong> : <li key={i}>{el.email}</li>
-            )}
-          </ul>
-          <ul>
-            {memberships.map((el, i) => 
-              <li key={i}>{el}</li>
-            )}
-          </ul>
-          <ul>
-            {cards.map((el, i) => (
-              <li>{el}</li>
-            ))}
-          </ul>
-          <button onClick={(e) => {
-            e.preventDefault();
-            toSettings();
-          }}>| Settings |</button>
-        </>}
-      </AvatarStyle>
-    )
-  }
+  return (
+    <AvatarStyle hideBg={!showDetails}>
+      <Img src={headShot} onClick={() => setShowDetails(!showDetails)}/>
+      {showDetails && <>
+        <h1>{name.full}</h1>
+        <ul>
+          {emails.map((el, i) => 
+            el.primary ? <strong><li key={i}>{el.email}</li></strong> : <li key={i}>{el.email}</li>
+          )}
+        </ul>
+        <ul>
+          {memberships.map((el, i) => 
+            <li key={i}>{el}</li>
+          )}
+        </ul>
+        <ul>
+          {cards.map((el, i) => (
+            <li>{el}</li>
+          ))}
+        </ul>
+        <Link to="settings">Settings</Link> 
+        <Link to="/logout" onClick={()=> window.location.pathname = '/auth/register'}>Logout</Link>
+      </>}
+    </AvatarStyle>
+  )
 }
 
 export default Avatar;

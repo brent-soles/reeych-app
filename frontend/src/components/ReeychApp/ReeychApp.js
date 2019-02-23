@@ -1,43 +1,25 @@
 import React from 'react';
-// import gql from 'graphql-tag';
-// import styled from '@emotion/styled';
-
-
-/**
- * Import user components
- */
-// import CardBoardQuery from './CardMutations/CardBoardQuery';
-// import SingleCardCreate from './CardMutations/SingleCardCreate';
-
-
-// const MainDiv = styled.div`
-//     width: 100%;
-//     // background-color: rgba(168, 246, 209, 1);
-//     background-color: rgba(0, 184, 158, 1);
-//     display: flex;
-//     flex-direction: row;
-//     flex-wrap: wrap;
-// `;
-
-
-// const ReeychApp = (props) => {
-//     const { spaceId } = props;
-//     return (
-//         <MainDiv>
-//             <SingleCardCreate spaceId={spaceId} />
-//             <CardBoardQuery spaceId={spaceId} />
-//         </MainDiv>
-//     )
-// }
-
+import { Router } from '@reach/router';
 
 import Profile from './Profile';
+import Dashboard from './Dashboard';
+// import CardBoardQuery from './Cards/CardMutations/CardBoardQuery';
+
+const Settings = () => {
+  return <h1> Yay settins </h1>;
+}
+
 
 function ReeychApp({ id }){
+  console.log('in aaaapp', id)
   return(
-    <div>
-      <Profile id={id} />
-    </div>
+    <>
+      <Profile />
+      <Router>
+        <Settings path="settings" />
+        <Dashboard path="/" default />
+      </Router>
+    </>
   )
 }
 

@@ -56,10 +56,10 @@ UserDAO.prototype.get = async function( args ) {
  *  {*} userRegistrationData: object with user details about who is being created
  *          defaults shoule be to only have username/passwd 
  */
-UserDAO.prototype.create = async function( userRegistrationData ) {
+UserDAO.prototype.create = async function( args ) {
     // Filters emails
     try {
-        const { first, last, email, password } = userRegistrationData; // gets necessary form data
+        const { first, last, email, password } = args; // gets necessary form data
         // Initial Token creation
         const expiration = _MinutesFromNow(30); // Sets the token to expire in 30 minutes
         const initToken = jwt.sign({ 
@@ -110,9 +110,9 @@ UserDAO.prototype.delete = async function( args ){
  * Function returns a valid JWT, after saving it to the most recent token used
  * 
  */
-UserDAO.prototype.login = async function( userLoginData ){
+UserDAO.prototype.login = async function( args ){
     try {
-        const { email, password } = userLoginData; // Should only have these two fields
+        const { email, password } = args; // Should only have these two fields
         
         // Grabs user data based off of subdocument email
         const user = await this.schema.findOne({ 

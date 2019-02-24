@@ -6,20 +6,22 @@ import Avatar from './Avatar';
 
 const userMockData = {
   name: {
-      first: 'Test',
-      last: 'Testington',
-      full: 'Test Testington'
+    first: 'Test',
+    last: 'Testington',
+    full: 'Test Testington'
   },
-  emails:[ 
-      { 
-          email: 'test@test.com', 
-          verified: true,
-          primary: true
-      },
-      { 
-        email: 'test2@test.com', 
-        verified: true,
-        primary: false
+  emails: [
+    {
+      key: 0,
+      email: 'test@test.com',
+      verified: true,
+      primary: true
+    },
+    {
+      key: 1,
+      email: 'test2@test.com',
+      verified: true,
+      primary: false
     }
   ],
   memberships: ["org1", "org2"],
@@ -28,8 +30,8 @@ const userMockData = {
 
 /*** End Mock User Data */
 
-function Profile(){
-  
+function Profile() {
+
   return <Avatar {...userMockData} />;
 }
 

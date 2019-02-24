@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from '@reach/router';
 import styled from '@emotion/styled';
+import ListItems from '../../SharedComponents/Utilities/ListItems';
 import { SECONDARY } from '../../SharedComponents/Styles/Colors';
 import headShot from './brent-mq.jpg'
 
@@ -32,13 +33,14 @@ function Avatar({ name, emails, memberships, cards }) {
   const AvatarStyle = styled.div`
     background-color: ${({hideBg}) => hideBg ? 'transparent' : 'rgba(0, 0, 0, .3)'};
     height: 100%;
+    padding-left: 6rem;
     display: grid;
     position: fixed;
     right: 0;
     min-width: 30rem;
     max-width:40rem;
     grid-template-rows: ${xySize + 4}rem 10rem auto auto;
-    text-align: center;
+    text-align: left;
   `;
 
   return (
@@ -46,22 +48,10 @@ function Avatar({ name, emails, memberships, cards }) {
       <Img src={headShot} onClick={() => setShowDetails(!showDetails)}/>
       {showDetails && <>
         <h1>{name.full}</h1>
-        <ul>
-          {emails.map((el, i) => 
-            el.primary ? <strong><li key={i}>{el.email}</li></strong> : <li key={i}>{el.email}</li>
-          )}
-        </ul>
-        <ul>
-          {memberships.map((el, i) => 
-            <li key={i}>{el}</li>
-          )}
-        </ul>
-        <ul>
-          {cards.map((el, i) => (
-            <li>{el}</li>
-          ))}
-        </ul>
-        <Link to="settings">Settings</Link> 
+        <ListItems list={emails} el={'email'} />
+        <ListItems list={memberships} />
+        <ListItems list={cards} />
+        <Link to="settings" onClick={() => setShowDetails(false)}>Settings</Link> 
         <Link to="/logout" onClick={()=> window.location.pathname = '/auth/register'}>Logout</Link>
       </>}
     </AvatarStyle>

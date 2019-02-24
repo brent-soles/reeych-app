@@ -9,7 +9,7 @@ function Login(){
   // Get's auth context, and method to update Auth stats upon successful login
   // Ref: src/lib/hook/useStatefulContext.js to see how ctx methods are applied
   const { authCtx, setAuthCtx } = useContext(AuthContext);
-  const { isAuthed, id } = authCtx;
+  const { isAuthed, currentSpace } = authCtx;
 
   // Keep tabs on current state form
   // TODO: add validation of fields
@@ -29,7 +29,7 @@ function Login(){
   // app/* is a protected route
   // If user has not been authenticated yet, keep showing form
   if(isAuthed){
-    return <Redirect to={`app/${id}`} noThrow />
+    return <Redirect to={`app/${currentSpace}`} noThrow />
   } else {
     const { email, passwd } = formData;
     return (

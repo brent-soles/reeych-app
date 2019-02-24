@@ -1,7 +1,7 @@
 import React from 'react';
 
 import FormCard from '../Cards/FormCard';
-import { CREATE_CARD } from '../Cards/GraphQLOperations';
+import { CREATE_CARD } from '../../../containers/Cards/Operations';
 
 
 export default function Dashboard(){

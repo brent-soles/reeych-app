@@ -3,6 +3,7 @@ import { Router } from '@reach/router';
 
 import Profile from './Profile';
 import Dashboard from './Dashboard';
+import TestCard from './Cards/Card';
 // import CardBoardQuery from './Cards/CardMutations/CardBoardQuery';
 
 const Settings = () => {
@@ -10,13 +11,14 @@ const Settings = () => {
 }
 
 
-function ReeychApp({ id }){
-  console.log('in aaaapp', id)
+function ReeychApp({ space }){
+  console.log('in aaaapp', space)
   return(
     <>
       <Profile />
       <Router>
         <Settings path="settings" />
+        <TestCard path="tc/:id" space={space}/>
         <Dashboard path="/" default />
       </Router>
     </>

@@ -12,8 +12,20 @@ export const ALL_CARDS = gql`
     }
 `;
 
+export const GET_CARD = gql`
+    query getCard($id: ID!, $space: String){
+        getCard(id: $id, spaceId: "5c672e823aedb67d4580e10a"){
+            id,
+            title,
+            author,
+            description
+        }
+    }
+`;
+
+
 export const CREATE_CARD = gql`
-    mutation CreateCard($id: ID!, $title: String!, $author: String!, $description: String!){
+    mutation createCard($id: ID!, $title: String!, $author: String!, $description: String!){
         createCard(belongsTo: $id, title: $title, author: $author, description: $description){
             id,
             title,
@@ -25,7 +37,7 @@ export const CREATE_CARD = gql`
 `;
 
 export const UPDATE_CARD = gql`
-    mutation UpdateCard($id: ID!, $title: String, $author: String, $description: String){
+    mutation updateCard($id: ID!, $title: String, $author: String, $description: String){
         updateCard(id: $id, title: $title, author: $author, description: $description){
             id,
             title,
@@ -38,7 +50,7 @@ export const UPDATE_CARD = gql`
 `;
 
 export const DELETE_CARD = gql`
-    mutation DeleteCard($id: ID!){
+    mutation deleteCard($id: ID!){
         deleteCard(id: $id){
             id
         }

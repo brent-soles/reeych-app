@@ -27,7 +27,7 @@
     "passport-local": "^1.0.0"
   },
   "scripts": {
-    "dev": "nodemon index.js",
+    "dev": "nodemon --watch 'lib/**/*' -e ts --exec ts-node ./index.ts",
     "test": "jest",
     "gql:init": "hygen gql init",
     "gql:scaffold": "hygen gql scaffold --type all",
@@ -36,7 +36,15 @@
     "dao:scaffoldModel": "hygen dao newModel"
   },
   "devDependencies": {
+    "@types/dotenv": "^6.1.0",
+    "@types/koa": "^2.0.48",
+    "@types/koa-router": "^7.0.39",
+    "@types/mongodb": "^3.1.19",
+    "@types/mongoose": "^5.3.19",
+    "@types/node": "^11.9.5",
     "jest": "^23.6.0",
-    "mockingoose": "^2.12.0"
+    "mockingoose": "^2.12.0",
+    "ts-node": "^8.0.2",
+    "typescript": "^3.3.3333"
   }
 }

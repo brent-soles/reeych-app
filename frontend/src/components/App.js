@@ -9,17 +9,19 @@ import { AuthContext } from './Authentication/AuthContext';
 
 function App(){
   const { authCtx } = useContext(AuthContext);
-  const { isAuthed, id } = authCtx;
+  const a = useContext(AuthContext);
+  const { isAuthed, currentSpace } = authCtx;
   console.log('In app', authCtx);
+  
   return (
     <div>
       {!isAuthed && <Link to="auth" >Login or Register</Link>}
       <Router basepath="/">
         <ProtectedRoute path="app" >
-          <ReeychApp path=":id/*" />
+          <ReeychApp path=":space/*" />
         </ProtectedRoute>
         <AuthForms path="auth/*"/>
-        <Redirect from={window.location.pathname} to={isAuthed ? `/app/${id}` : "auth/login"} default noThrow />
+        <Redirect from={window.location.pathname} to={isAuthed ? `/app/${currentSpace}` : "auth/login"} default noThrow />
       </Router>
     </div>
   )

@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "@types/dotenv": "^6.1.0"
+  }
+}

@@ -15,7 +15,10 @@ if(!reeychDevData){
     {
       data: {
         isAuthed: false,
-        id: 567,
+        currentSpace: 'testDev',
+        spaces: [
+          'otherDev',
+        ],
         email: 'test@test.com',
       }
     }
@@ -36,7 +39,7 @@ function Application() {
     ));
   }, [authCtx])
 
-
+  console.log('In index', authCtx);
   return (
     <ApolloProvider client={InitClient({
       endpoint: 'http://localhost:7000/graphql'

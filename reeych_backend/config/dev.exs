@@ -49,8 +49,8 @@ config :phoenix, :plug_init_mode, :runtime
 
 # Configure your database
 config :reeych_backend, ReeychBackend.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "reeych_bot",
+  password: "r33ych$dev_bot",
   database: "reeych_backend_dev",
   hostname: "localhost",
   pool_size: 10

@@ -40,7 +40,12 @@ defmodule ReeychBackend.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"},
+      {:argon2_elixir, "~>2.0"},
+      {:absinthe, "~>1.4"},
+      {:absinthe_plug, "~>1.4"},
+      {:shortuuid, "~> 2.0"},
+      {:ecto_shortuuid, "~> 0.1"}
     ]
   end
 

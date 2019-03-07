@@ -53,4 +53,5 @@ config :reeych_backend, ReeychBackend.Repo,
   password: "r33ych$dev_bot",
   database: "reeych_backend_dev",
   hostname: "localhost",
-  pool_size: 10
+  pool_size: 10,
+  migration_primary_key: [name: :id, type: :binary_id]

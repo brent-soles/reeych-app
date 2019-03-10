@@ -2,12 +2,15 @@ defmodule ReeychBackend.Accounts.User do
   use ReeychBackend.Common.Schema
   import Ecto.Changeset
 
+  alias ReeychBackend.Accounts.Credential
 
   schema "users" do
     field :first_name, :string
     field :job_title, :string
     field :last_name, :string
     field :verified, :boolean
+
+    has_one :credential, Credential
 
     timestamps()
   end

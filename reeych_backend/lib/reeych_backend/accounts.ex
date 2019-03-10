@@ -5,7 +5,7 @@ defmodule ReeychBackend.Accounts do
 
   import Ecto.Query, warn: false
   alias ReeychBackend.Repo
-
+  alias ReeychBackend.Common.Helpers
   alias ReeychBackend.Accounts.User
 
   @doc """
@@ -124,14 +124,29 @@ defmodule ReeychBackend.Accounts do
 
   ## Examples
 
-      iex> get_credential!(123)
-      %Credential{}
+      iex> get_credential!(%{email: "user@email.com"})
+      %{:ok, %Credential{}}
 
       iex> get_credential!(456)
-      ** (Ecto.NoResultsError)
+      %{:error, "error message"}
 
   """
-  def get_credential!(id), do: Repo.get!(Credential, id)
+  def get_credential!(%{email: _} = creds \\ %{}) do 
+    Repo.get_by(Credential, email: creds.email)
+    |> Helpers.package_result_query_map()
+  end
+
+  def get_and_validate_credential!(%{email: _, password: _} = creds \\ %{}) do
+    case get_credential!(%{email: creds.email}) do
+      {:ok, user} ->
+        {:ok, _} = Argon2.check_pass(%{password: user.password}, creds.password, hash_key: :password)
+        {:ok, user}
+      {:error, message} ->
+        {:error, message}
+      _ ->
+        {:error, "Unable to verify credentials"}
+    end
+  end
 
   @doc """
   Creates a credential.
@@ -148,6 +163,7 @@ defmodule ReeychBackend.Accounts do
   def create_credential(attrs \\ %{}) do
     %Credential{}
     |> Credential.changeset(attrs)
+    |> Credential.hash_password()
     |> Repo.insert()
   end
 
@@ -196,5 +212,24 @@ defmodule ReeychBackend.Accounts do
   """
   def change_credential(%Credential{} = credential) do
     Credential.changeset(credential, %{})
+  end
+
+  @doc """
+  Returns a users full account
+
+  ## Example
+
+      iex> get_account(%Credential{})
+      %Credential{
+        user: %User
+      }
+  """
+  def get_account(%Credential{} = credential) do
+    case get_and_validate_credential!(credential) do
+      {:ok, user} ->
+        user |> Repo.preload(:user)
+      {:error, _} ->
+        "error"
+    end
   end
 end

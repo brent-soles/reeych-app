@@ -139,8 +139,12 @@ defmodule ReeychBackend.Accounts do
   def get_and_validate_credential!(%{email: _, password: _} = creds \\ %{}) do
     case get_credential!(%{email: creds.email}) do
       {:ok, user} ->
-        {:ok, _} = Argon2.check_pass(%{password: user.password}, creds.password, hash_key: :password)
-        {:ok, user}
+        case Argon2.check_pass(%{password: user.password}, creds.password, hash_key: :password) do
+          {:ok, _} -> 
+            {:ok, user}
+          {:error, message} ->
+            {:error, message}
+        end
       {:error, message} ->
         {:error, message}
       _ ->
@@ -229,7 +233,7 @@ defmodule ReeychBackend.Accounts do
       {:ok, user} ->
         user |> Repo.preload(:user)
       {:error, _} ->
-        "error"
+        {:error, "Inavalid credentials provided to: get_account"}
     end
   end
 end

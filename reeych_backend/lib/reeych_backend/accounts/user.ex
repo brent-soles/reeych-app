@@ -11,6 +11,7 @@ defmodule ReeychBackend.Accounts.User do
     field :verified, :boolean
 
     has_one :credential, Credential
+    many_to_many :spaces, ReeychBackend.Spaces.Space, join_through: ReeychBackend.Relations.UsersSpaces
 
     timestamps()
   end

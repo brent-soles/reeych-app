@@ -35,4 +35,5 @@ defmodule ReeychBackend.Accounts.Credential do
       put_change(changeset, :password, Argon2.add_hash(password).password_hash)
     end
   end
+
 end

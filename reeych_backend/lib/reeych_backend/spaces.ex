@@ -9,6 +9,9 @@ defmodule ReeychBackend.Spaces do
   alias ReeychBackend.Spaces.Space
   alias ReeychBackend.Accounts
 
+  # Relation functions
+  alias ReeychBackend.UserSpace
+
   @doc """
   Returns the list of spaces.
 
@@ -71,43 +74,18 @@ defmodule ReeychBackend.Spaces do
   ) do
     # Get User from DB
     # Then if they exists, create the space
-    # TODO: give them ownership role
     user = Accounts.get_user!(user_id)
     case create_space(%{org: org, name: name}) do
       {:ok, space} -> 
-        Repo.preload(space, :users) 
-        |> Ecto.Changeset.change()
-        |> Ecto.Changeset.put_assoc(:users, [user])
-        |> Repo.update
+        UserSpace.add_user_space_relation(%{
+          user_id: user.id,
+          space_id: space.id
+        }, "owner")
       {:error, _} ->
         IO.puts "Counldn't create space"
     end
 
   end
-
-  def update_space_add_user(
-    %{user_id: user_id} = user_req, 
-    %{id: _} = space_params,
-    requested_access_level \\ nil
-  ) do
-    
-    # Adding a user twice is a contraint on
-    # The DB
-    user = Accounts.get_user!(user_id)
-    space = get_space!(space_params.id)
-
-    %ReeychBackend.Relations.UsersSpaces{user_id: user.id, space_id: space.id, access_level: requested_access_level}
-    |> ReeychBackend.Relations.UsersSpaces.changeset
-    |> Repo.insert
-  end
-
-  # def update_space_user_access(
-  #   %{user_id: user_id} = user_req, 
-  #   %{id: _} = space_params,
-  #   requested_access_level \\ nil
-  # ) do
-  #   from usr
-  # end
 
   @doc """
   Updates a space.

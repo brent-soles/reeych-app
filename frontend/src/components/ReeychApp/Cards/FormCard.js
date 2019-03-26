@@ -1,10 +1,10 @@
 /**
  * Render prop for form card
  */
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { graphql } from 'react-apollo';
 import styled from '@emotion/styled';
-
+import { convertToRaw } from 'draft-js';
 
 const CardContainerGrid = styled.div`
     display: grid;
@@ -33,7 +33,10 @@ function FormCard({mutation, initialState, children}){
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          console.log("formState", formState);
+          
+          const c = convertToRaw(formState.content.getCurrentContent())
+          // console.log("formState", formState, document.getElementsByName('content')[0].innerText);
+          console.log({...formState, content: c});
           mutate({
             variables: {...formState}
           })

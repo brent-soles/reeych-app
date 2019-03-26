@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
-import { useTransition, animated } from 'react-spring';
+import React from 'react';
 import { Link } from '@reach/router';
+import { useTransition, animated } from 'react-spring';
 import styled from '@emotion/styled';
 
+const Ul = styled.ul`
+list-style: none;
+text-decoration: none;
 
-function ListItems({ list, el }) {
-  const Ul = styled.ul`
-    list-style: none;
-    text-decoration: none;
-    
-    li {
-      font-size: 2rem;
-    }
-  `
-  //const [items, setItems] = useState(list);
-  const transitions = useTransition(list, (list, i) => i, {
+li a {
+  font-size: 2rem;
+  text-decoration: none;
+}
+`;
+
+function ListItems({ list, linkCb }) {
+  const transitions = useTransition(Object.values(list), (_, i) => i, {
     from: { transform: 'translate3d(40px,0,0)', opacity: 0 },
     enter: { transform: 'translate3d(0px,0,0)', opacity: 1 },
     leave: { transform: 'translate3d(40px,0,0)', opacity: 0 },
@@ -23,11 +23,16 @@ function ListItems({ list, el }) {
   });
   return (
     <Ul>
-      {transitions.map(({item, props, key}) => (
-        <animated.li key={key} style={props}>
-          {el ? item[el] : item}
+      {transitions.map(({item, props, key}) => {
+        console.log('item', item);
+        return (
+        <animated.li id={item.id} key={key} style={props}>
+          <Link to={item.url} onClick={linkCb}>
+            {item.id}
+          </Link>
         </animated.li>
-      ))}
+        )
+      })}
     </Ul>
   )
 }

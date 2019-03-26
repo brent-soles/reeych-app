@@ -9,9 +9,8 @@ import { AuthContext } from './Authentication/AuthContext';
 
 function App(){
   const { authCtx } = useContext(AuthContext);
-  const a = useContext(AuthContext);
   const { isAuthed, currentSpace } = authCtx;
-  console.log('In app', authCtx);
+  // console.log('In app', authCtx);
   
   return (
     <div>

@@ -15,9 +15,9 @@ if(!reeychDevData){
     {
       data: {
         isAuthed: false,
-        currentSpace: 'testDev',
+        currentSpace: 'church',
         spaces: [
-          'otherDev',
+          'other',
         ],
         email: 'test@test.com',
       }

@@ -44,6 +44,7 @@ defmodule ReeychBackend.MixProject do
       {:argon2_elixir, "~>2.0"},
       {:absinthe, "~>1.4"},
       {:absinthe_plug, "~>1.4"},
+      {:poison, "~> 3.1"}, # Needed as it is an absinthe dependency
       {:shortuuid, "~> 2.0"},
       {:ecto_shortuuid, "~> 0.1"}
     ]

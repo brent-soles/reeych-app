@@ -231,9 +231,14 @@ defmodule ReeychBackend.Accounts do
   def get_account(%Credential{} = credential) do
     case get_and_validate_credential!(credential) do
       {:ok, user} ->
-        user |> Repo.preload(:user)
+        usr = user |> Repo.preload(:user)
+        {:ok, usr}
       {:error, _} ->
         {:error, "Inavalid credentials provided to: get_account"}
     end
+  end
+
+  def update_account(args) do
+     
   end
 end

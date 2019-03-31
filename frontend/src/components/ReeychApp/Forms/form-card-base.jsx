@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { graphql } from 'react-apollo';
 import styled from '@emotion/styled';
 import { convertToRaw } from 'draft-js';
+import { funnlAsync } from 'funnl';
 
 const CardContainerGrid = styled.div`
     display: grid;
@@ -28,18 +29,29 @@ function FormCard({mutation, initialState, children}){
   // mutate is passed from gqlEnhance, children is from FormCard props
   // The component re
   const Component = gqlEnhance(({ mutate }) => {
-    const [formState, setFormState] = useState({ ...initialState });
+    const [formState, setFormState] = useState(initialState);
     return (
       <form
-        onSubmit={(event) => {
+        onSubmit={async (event) => {
           event.preventDefault();
           
-          const c = convertToRaw(formState.content.getCurrentContent())
-          // console.log("formState", formState, document.getElementsByName('content')[0].innerText);
-          console.log({...formState, content: c});
-          mutate({
-            variables: {...formState}
-          })
+          const toString = false;
+          await funnlAsync([
+            formState.content.getCurrentContent(),
+            convertToRaw,
+            (r) => ({
+              variables: {
+                ...formState,
+                content: toString ? JSON.stringify(r) : r
+              }
+            }),
+            mutate // Send data to backend
+          ])
+
+          // console.log('formValues ', formValues);
+          // mutate({
+          //   variables: {...formState}
+          // })
         }}
       >
         <CardContainerGrid>

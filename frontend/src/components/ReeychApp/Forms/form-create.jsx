@@ -1,9 +1,9 @@
 import React from 'react';
-import {EditorState, convertToRaw} from 'draft-js';
+import { EditorState } from 'draft-js';
 import styled from '@emotion/styled';
 
-import FormCard from '../Cards/FormCard';
-import TextEditor from './TextEditor';
+import FormCard from './form-card-base';
+import TextEditor from './text-editor';
 import { CREATE_CARD } from '../../../containers/Cards/Operations';
 
 const FormCardWrapper = styled.div`

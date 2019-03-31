@@ -4463,6 +4463,11 @@ functional-red-black-tree@^1.0.1:
   resolved "https://registry.yarnpkg.com/functional-red-black-tree/-/functional-red-black-tree-1.0.1.tgz#1b0ab3bd553b2a0d6399d29c0e3ea0b252078327"
   integrity sha1-GwqzvVU7Kg1jmdKcDj6gslIHgyc=
 
+funnl@^0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/funnl/-/funnl-0.0.8.tgz#bb8f83fa3b0a3e78710db2bc51bd62b35f0c66ef"
+  integrity sha512-U62jhQMSiv5KQ+F9WERHZCU2mcskrcVXjeZ5N2ZtD0oofefwNDgwlVYhx3C3Ki4CRdu4gPQ0V4PmNF3JY69H9Q==
+
 gauge@~2.7.3:
   version "2.7.4"
   resolved "https://registry.yarnpkg.com/gauge/-/gauge-2.7.4.tgz#2c03405c7538c39d7eb37b317022e325fb018bf7"

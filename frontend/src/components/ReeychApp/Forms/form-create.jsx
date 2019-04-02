@@ -28,6 +28,11 @@ const FormCardWrapper = styled.div`
   input:focus {
     background: rgba(0, 0, 0, .2);
   }
+
+  #create-card-main {
+
+  }
+  
 `
 
 function FormCreateCard(){
@@ -53,12 +58,9 @@ function FormCreateCard(){
           }
       }}>
         {({ formState, setFormState }) => {
-
           const handleChange = ({ target }) => {
-            console.log('setting', { [target.name]: target.value })
             setFormState({...formState, [target.name]: target.value});
           }
-          
           return (
             <>
               <input 
@@ -83,6 +85,7 @@ function FormCreateCard(){
                 ))}
               </select>
               <TextEditor
+                id={`create-card-main`}
                 name='content'
                 content={formState.content}
                 onChange={(editorState) => {

@@ -4,19 +4,36 @@ import {Editor, RichUtils } from 'draft-js';
 import styled from '@emotion/styled';
 
 const EditorWrapper = styled.div`
-  background: yellow;
+  background: rgba(0, 0, 0, .13);
+  border-radius: .6rem;
+
   min-height: 20rem;
   min-width: 30rem;
   max-width: 100%;
-  transition: .1s ease-in-out;
+  
+  margin: 1rem 0rem;
 
-  .DraftEditor-root:focus {
-    background: grey;
+  transition: .1s ease-in-out;
+  
+  .DraftEditor-root {
+    padding: 1rem;
   }
 `
+const BtnControlBar = styled.div`
+background: rgba(0, 0, 0, .09);
+  dislay: flex;
+  flex-direction: row;
+  
+  button {
+    padding: 1rem;
+    margin: .5rem;
+    border-radius: .6rem;
+    width: 4.5rem;
+  }
+`;
 
 function TextEditor({ content, onChange }) {
-  
+  // Set bold in draf editor
   const _onBoldClick = () => {
     onChange(RichUtils.toggleInlineStyle(content, "BOLD"));
   };
@@ -37,8 +54,10 @@ function TextEditor({ content, onChange }) {
 
   return (
     <EditorWrapper id="editorWrapper">
-      <button onClick={_onBoldClick}>B</button>
-      <button onClick={_onItalicClick}>I</button>
+      <BtnControlBar>
+        <button onClick={_onBoldClick}>B</button>
+        <button onClick={_onItalicClick}>I</button>
+      </BtnControlBar>
       <Editor
         spellCheck
         stripPastedStyles
@@ -49,5 +68,15 @@ function TextEditor({ content, onChange }) {
     </EditorWrapper>
   );
 }
+
+
+
+// function BtnControlBar(props) {
+//   return (
+//     <div id="btn-control-bar">
+//       {props.children}
+//     </div>
+//   )
+// }
 
 export default TextEditor;

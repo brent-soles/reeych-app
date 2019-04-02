@@ -45,7 +45,8 @@ function FormCard({mutation, initialState, children}){
                 content: toString ? JSON.stringify(r) : r
               }
             }),
-            mutate // Send data to backend
+            (r) => console.log(`Sending:`, r)
+            // mutate // Send data to backend
           ])
 
           // console.log('formValues ', formValues);

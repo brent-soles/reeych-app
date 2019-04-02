@@ -11,7 +11,7 @@ const EditorWrapper = styled.div`
   min-width: 30rem;
   max-width: 100%;
   
-  margin: 1rem 0rem;
+  margin: 2rem 0rem;
 
   transition: .1s ease-in-out;
   
@@ -55,6 +55,17 @@ function TextEditor({ content, onChange }) {
   return (
     <EditorWrapper id="editorWrapper">
       <BtnControlBar>
+        <button onClick={_onBoldClick}>B</button>
+        <button onClick={_onItalicClick}>I</button>
+        {/* Solely for mocking purposes */}
+        <button onClick={_onBoldClick}>B</button>
+        <button onClick={_onItalicClick}>I</button>
+        <button onClick={_onBoldClick}>B</button>
+        <button onClick={_onItalicClick}>I</button>
+        <button onClick={_onBoldClick}>B</button>
+        <button onClick={_onItalicClick}>I</button>
+        <button onClick={_onBoldClick}>B</button>
+        <button onClick={_onItalicClick}>I</button>
         <button onClick={_onBoldClick}>B</button>
         <button onClick={_onItalicClick}>I</button>
       </BtnControlBar>

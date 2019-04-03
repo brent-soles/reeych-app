@@ -11,9 +11,8 @@ const DashBoardContainer = styled.div`
 `;
 
 function Dashboard(props){
-  // console.log('dash', props);
   const { authCtx } = useContext(AuthContext);
-  const { profile: { spaces } } = authCtx;
+  const { data: { profile: { spaces } } } = authCtx;
   return (
     <DashBoardContainer>
       <h1>{spaces[props.path].name}</h1>

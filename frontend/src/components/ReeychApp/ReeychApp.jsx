@@ -10,13 +10,12 @@ const Settings = () => {
 
 
 function ReeychApp(props){
-  console.log('RA', props);
   return(
     <>
       <Profile />
       <Router>
-        <Settings path=":space/settings" />
-        <Dashboard path={props.space} default />
+        <Dashboard path={props.spaceId} default />
+        <Settings path={`${props.spaceId}/settings`} />
       </Router>
     </>
   )

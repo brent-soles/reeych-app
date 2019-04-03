@@ -8,13 +8,13 @@ export const profile = {
       id: 'nRVyGefb7qn2A5BqjNUM59',
       name: 'Church',
       org: 'Church',
-      url: '/app/r/nRVyGefb7qn2A5BqjNUM59'
+      url: '/app/space/nRVyGefb7qn2A5BqjNUM59'
     },
     'dnrJJo9MzN6E76fJdryUXR': {
       id: 'dnrJJo9MzN6E76fJdryUXR',
       name: 'Spayce',
       org: 'NAN',
-      url: '/app/r/dnrJJo9MzN6E76fJdryUXR'
+      url: '/app/space/dnrJJo9MzN6E76fJdryUXR'
     },
   },
 }

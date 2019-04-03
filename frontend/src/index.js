@@ -11,31 +11,36 @@ import { profile } from './lib/mockData/profile';
 
 import * as serviceWorker from './serviceWorker';
 
-const reeychDevData = JSON.parse(localStorage.getItem('reeych-dev'));
-if(!reeychDevData){
-  localStorage.setItem('reeych-dev', JSON.stringify(
-    {
-      data: {
-        isAuthed: false,
-        profile
-      }
-    }
-  ));
-  throw new Error('local storage init'); // Lol
-}
+// const reeychDevData = JSON.parse(localStorage.getItem('reeych-dev'));
+// if(!reeychDevData){
+//   localStorage.setItem('reeych-dev', JSON.stringify(
+//     {
+//       data: {
+//         isAuthed: false,
+//         profile
+//       }
+//     }
+//   ));
+//   throw new Error('local storage init'); // Lol
+// }
 
 function Application() {
 
-  const { data } = reeychDevData;
-  const [authCtx, setAuthCtx] = useState(data);
+  // const { data } = reeychDevData;
+  const [authCtx, setAuthCtx] = useState({
+    data: {
+      isAuthed: true,
+      profile
+    }
+  });
 
-  useEffect(() => {
-    localStorage.setItem('reeych-dev', JSON.stringify(
-      {
-        data: authCtx
-      }
-    ));
-  }, [authCtx])
+  // useEffect(() => {
+  //   localStorage.setItem('reeych-dev', JSON.stringify(
+  //     {
+  //       data: authCtx
+  //     }
+  //   ));
+  // }, [authCtx])
 
   console.log('In index', authCtx);
   return (

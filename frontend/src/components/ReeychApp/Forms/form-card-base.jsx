@@ -35,7 +35,7 @@ function FormCard({mutation, initialState, children}){
         onSubmit={async (event) => {
           event.preventDefault();
           
-          const toString = false;
+          const toString = true;
           await funnlAsync([
             formState.content.getCurrentContent(),
             convertToRaw,
@@ -48,11 +48,6 @@ function FormCard({mutation, initialState, children}){
             (r) => console.log(`Sending:`, r)
             // mutate // Send data to backend
           ])
-
-          // console.log('formValues ', formValues);
-          // mutate({
-          //   variables: {...formState}
-          // })
         }}
       >
         <CardContainerGrid>

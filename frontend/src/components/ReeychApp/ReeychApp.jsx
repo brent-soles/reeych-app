@@ -9,14 +9,14 @@ const Settings = () => {
 }
 
 
-function ReeychApp({ space }){
-  console.log('in aaaapp', space)
+function ReeychApp(props){
+  console.log('RA', props);
   return(
     <>
       <Profile />
       <Router>
-        <Settings path="settings" />
-        <Dashboard path="/" default />
+        <Settings path=":space/settings" />
+        <Dashboard path={props.space} default />
       </Router>
     </>
   )

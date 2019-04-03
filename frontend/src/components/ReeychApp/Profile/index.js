@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import Avatar from './Avatar';
 
 /*** Mock User Data */
-import { profile } from '../../../lib/mockData/profile';
+import { AuthContext } from '../../Authentication/AuthContext';
 /*** End Mock User Data */
 
 function Profile() {
-
+  const { authCtx: { profile } } = useContext(AuthContext);
   return <Avatar {...profile} />;
 }
 

@@ -1,15 +1,20 @@
 export const profile = {
-  first_name: "Mock",
-  last_name: "Author",
-  email: "mock.authoer@email.com",
+  id: 'RrJqonQRFJ2DFsza2KreUN',
+  first_name: 'AMock',
+  last_name: 'BMock',
+  email: 'trendy@trendyweb.dev',
   spaces: {
-    "church": {
-      id: "church",
-      url: "/app/church"
+    'nRVyGefb7qn2A5BqjNUM59': {
+      id: 'nRVyGefb7qn2A5BqjNUM59',
+      name: 'Church',
+      org: 'Church',
+      url: '/app/r/nRVyGefb7qn2A5BqjNUM59'
     },
-    "other": {
-      id: "other",
-      url: "/app/other"
-    }
-  }
+    'dnrJJo9MzN6E76fJdryUXR': {
+      id: 'dnrJJo9MzN6E76fJdryUXR',
+      name: 'Spayce',
+      org: 'NAN',
+      url: '/app/r/dnrJJo9MzN6E76fJdryUXR'
+    },
+  },
 }

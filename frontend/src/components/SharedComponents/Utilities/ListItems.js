@@ -28,7 +28,7 @@ function ListItems({ list, linkCb }) {
         return (
         <animated.li id={item.id} key={key} style={props}>
           <Link to={item.url} onClick={linkCb}>
-            {item.id}
+            {item.name}
           </Link>
         </animated.li>
         )

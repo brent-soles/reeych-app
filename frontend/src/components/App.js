@@ -17,7 +17,7 @@ function App(){
       {!isAuthed && <Link to="auth" >Login or Register</Link>}
       <Router basepath="/">
         <ProtectedRoute path="app" >
-          <ReeychApp path=":space/*" />
+          <ReeychApp path="r/:space" />
         </ProtectedRoute>
         <AuthForms path="auth/*"/>
         <Redirect from={window.location.pathname} to={isAuthed ? `/app/${currentSpace}` : "auth/login"} default noThrow />

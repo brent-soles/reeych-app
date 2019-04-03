@@ -7,6 +7,8 @@ import App from './components/App';
 import InitClient from './lib/Apollo/init';
 import { AuthContext } from './components/Authentication/AuthContext';
 
+import { profile } from './lib/mockData/profile';
+
 import * as serviceWorker from './serviceWorker';
 
 const reeychDevData = JSON.parse(localStorage.getItem('reeych-dev'));
@@ -15,15 +17,11 @@ if(!reeychDevData){
     {
       data: {
         isAuthed: false,
-        currentSpace: 'church',
-        spaces: [
-          'other',
-        ],
-        email: 'test@test.com',
+        profile
       }
     }
   ));
-  throw new Error('local storage init')
+  throw new Error('local storage init'); // Lol
 }
 
 function Application() {

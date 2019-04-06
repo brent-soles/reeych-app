@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useReducer, createContext } from 'react';
 import ReactDOM from 'react-dom';
 import { ApolloProvider } from 'react-apollo';
 
@@ -6,6 +6,8 @@ import './index.css';
 import App from './components/App';
 import InitClient from './lib/Apollo/init';
 import { AuthContext } from './components/Authentication/AuthContext';
+
+import hydrateReducerState from './store';
 
 import { profile } from './lib/mockData/profile';
 
@@ -24,7 +26,12 @@ import * as serviceWorker from './serviceWorker';
 //   throw new Error('local storage init'); // Lol
 // }
 
+const { reducer, seed } = hydrateReducerState();
+export const StoreContext = createContext({});
+
 function Application() {
+
+  const [state, dispatch] = useReducer(reducer, seed);
 
   // const { data } = reeychDevData;
   const [authCtx, setAuthCtx] = useState({
@@ -43,13 +50,16 @@ function Application() {
   // }, [authCtx])
 
   console.log('In index', authCtx);
+  console.log('In index seed', seed);
   return (
     <ApolloProvider client={InitClient({
       endpoint: 'http://localhost:7000/graphql'
     })}>
-      <AuthContext.Provider value={{ authCtx, setAuthCtx }}> 
-        <App />
-      </AuthContext.Provider>
+      <StoreContext.Provider value={{ state, dispatch }}>
+        <AuthContext.Provider value={{ authCtx, setAuthCtx }}> 
+          <App />
+        </AuthContext.Provider>
+      </StoreContext.Provider>
     </ApolloProvider>
   );
 }

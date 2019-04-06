@@ -1,11 +1,12 @@
 defmodule ReeychBackendWeb.Graphql.AccountSchema do
-  use Absinthe.Schema
+  use Absinthe.Schema.Notation
 
   # alias CommunityWeb.NewsResolver
 
   object :account do
-    field :id, non_null(:string)
-    field :authed, non_null(:boolean)
+    field :id, :string
+    field :email, :string
+    field :user, :user
   end
 
   object :message do
@@ -13,7 +14,4 @@ defmodule ReeychBackendWeb.Graphql.AccountSchema do
     field :message, :string
   end
 
-  query do
-    field :get_account, non_null(:message)
-  end
 end

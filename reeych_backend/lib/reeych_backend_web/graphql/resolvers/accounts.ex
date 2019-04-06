@@ -2,7 +2,10 @@ defmodule ReeychBackendWeb.Graphql.AccountsResolver do
   alias ReeychBackend.Accounts
   alias ReeychBackend.Accounts.{Credential, User}
 
-  def get_account(_root, %{email: email, password: password} = _args, _info) do
+  def get_account(_root, %{input: %{email: email, password: password}} = _args, _info) do
+    IO.puts "!!!!!!!!!!!Args!!!!!!!!!!!!!!:"
+    IO.puts "#{email}, #{password}"
+
     case Accounts.get_account(%Credential{email: email, password: password}) do 
       {:error, _} -> 
         {:error, %{message: "Query failed for creds: #{email}"}}

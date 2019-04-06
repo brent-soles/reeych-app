@@ -2,8 +2,7 @@ import React, { useContext } from 'react';
 import styled from '@emotion/styled';
 
 import FormCreateCard from '../Forms/form-create';
-import { AuthContext } from '../../Authentication/AuthContext';
-import { StoreContext } from '../../../../src';
+import StoreContext from '../../../store/context';
 
 const DashBoardContainer = styled.div`
   h1 {
@@ -12,14 +11,28 @@ const DashBoardContainer = styled.div`
 `;
 
 function Dashboard(props){
-  const { authCtx } = useContext(AuthContext);
-  const { data: { profile: { spaces } } } = authCtx;
-  const store = useContext(StoreContext);
-  console.log("STORE: ", store);
+  
+  const { state } = useContext(StoreContext);
+  const { spaces, cards } = state;
+  
+  const currentSpaceId = spaces.current;
+  const currentSpaceName = spaces.all[currentSpaceId].name;
+
   return (
     <DashBoardContainer>
-      <h1>{spaces[props.path].name}</h1>
+      <h1>{currentSpaceName}</h1>
       <FormCreateCard />
+      <div>
+        <ul>
+          {Object.keys(cards)
+            .map((el, i) => {
+              const {meta, id} = cards[el];
+              return meta.spaceId === currentSpaceId ?
+                <li key={i}>{id}</li> :
+                null;
+          })}
+        </ul>
+      </div>
     </DashBoardContainer>
   );
 }

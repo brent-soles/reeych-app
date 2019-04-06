@@ -5,23 +5,22 @@ import { Router, Link, Redirect } from '@reach/router';
 import ProtectedRoute from './SharedComponents/Utilities/ProtectedRoute';
 import AuthForms from './Authentication/AuthForms';
 import ReeychApp from './ReeychApp/ReeychApp';
-import { AuthContext } from './Authentication/AuthContext';
+import StoreContext from '../store/context';
 
 function App(){
-  const { authCtx } = useContext(AuthContext);
-  const { data: { isAuthed, profile }} = authCtx;
-  console.log('In app', authCtx);
-  console.log('Obj', Object.keys(profile.spaces)[0])
-  
+  const { state } = useContext(StoreContext);
+  const { authenticated } = state.authentication;
+  const { spaces } = state.profile;
+
   return (
     <div>
-      {!isAuthed && <Link to="auth" >Login or Register</Link>}
+      {!authenticated && <Link to="auth" >Login or Register</Link>}
       <Router basepath="/">
         <ProtectedRoute path="app" >
           <ReeychApp path="space/:spaceId" />
         </ProtectedRoute>
         <AuthForms path="auth/*"/>
-        <Redirect from={window.location.pathname} to={isAuthed ? `/app/space/${Object.keys(profile.spaces)[0]}` : "auth/login"} default noThrow />
+        <Redirect from={window.location.pathname} to={authenticated ? `/app/space/${spaces.current}` : "auth/login"} default noThrow />
       </Router>
     </div>
   )

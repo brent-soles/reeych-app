@@ -22,7 +22,10 @@ const AvatarStyle = styled.div`
 `;
 
 
-function Avatar({ first_name, last_name, email, spaces, cards }) {
+// function Avatar({ first_name, last_name, email, spaces, cards }) {
+function Avatar({ profileData, spacesData, dispatch }) {
+
+  const { first_name, last_name, email } = profileData;
 
   const [showDetails, setShowDetails] = useState(false);
   const toggleAvatarBar = () => {
@@ -30,6 +33,8 @@ function Avatar({ first_name, last_name, email, spaces, cards }) {
       return !prevState
     })
   }
+
+
 
   return (
     <AvatarStyle hideBg={!showDetails}>
@@ -40,7 +45,7 @@ function Avatar({ first_name, last_name, email, spaces, cards }) {
         <ul>
           <li>{email}</li>
         </ul>
-        <ListItems list={spaces} linkCb={toggleAvatarBar} />
+        <ListItems list={spacesData.all} linkCb={toggleAvatarBar} dispatch={dispatch} />
         <Link to="settings" onClick={toggleAvatarBar}>Settings</Link> 
         <Link to="/logout" onClick={()=> window.location.pathname = '/auth/register'}>Logout</Link>
       </>

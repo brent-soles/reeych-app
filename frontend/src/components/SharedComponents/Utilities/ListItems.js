@@ -13,7 +13,7 @@ li a {
 }
 `;
 
-function ListItems({ list, linkCb }) {
+function ListItems({ list, linkCb, dispatch }) {
   const transitions = useTransition(Object.values(list), (_, i) => i, {
     from: { transform: 'translate3d(40px,0,0)', opacity: 0 },
     enter: { transform: 'translate3d(0px,0,0)', opacity: 1 },
@@ -27,7 +27,12 @@ function ListItems({ list, linkCb }) {
         console.log('item', item);
         return (
         <animated.li id={item.id} key={key} style={props}>
-          <Link to={item.url} onClick={linkCb}>
+          <Link to={item.url} 
+            onClick={() => {
+              dispatch({target: 'spaces', type: 'UPDATE_CURRENT', payload: item.id})
+              linkCb();
+            }}
+          >
             {item.name}
           </Link>
         </animated.li>

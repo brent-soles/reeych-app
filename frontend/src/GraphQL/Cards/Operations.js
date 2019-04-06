@@ -1,20 +1,25 @@
 import gql from 'graphql-tag';
 
 export const ALL_CARDS = gql`
-    query getCards($id: ID!){
-        getCards(id: $id){
-            id,
-            title,
-            author,
-            description,
-            lastModified
-        }
+  input GetCardInput {
+    spaceId: ID!
+    cardId: ID!
+  }
+
+  query getCards($input: GetCardInput!){
+    getCards(input: $input){
+      id,
+      title,
+      author,
+      description,
+      lastModified
     }
+  }
 `;
 
 export const GET_CARD = gql`
     query getCard($id: ID!, $space: String){
-        getCard(id: $id, spaceId: "5c672e823aedb67d4580e10a"){
+        getCard(input: $input){
             id,
             title,
             author,

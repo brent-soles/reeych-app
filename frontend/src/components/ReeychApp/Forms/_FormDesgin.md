@@ -7,12 +7,12 @@
 ```javascript
   // ... other json stuff ...
   "card-5678": {
-      id: "card-5678",
-      title: "Another mock title",
-      author: "Mock Author2",
-      date: "2019-04-03",
-      time: "1300"
-    }
+    id: "card-5678",
+    title: "Another mock title",
+    author: "Mock Author2",
+    date: "2019-04-03",
+    time: "1300"
+  }
   // ... other json stuff ...
 ```
 In general, a "card" will be stored in a global state object and referenced by it's ID.
@@ -24,3 +24,19 @@ The above card represents the minimum amount of information needed to store a ca
 Before the data is transmittied to the server, it will be wrapped in some information, and a cookie
 will be sent along to verify/authorize the user to do so.
 
+### Ready for transmission
+
+A fully wrapped card ready to be transmitted will look like:
+
+```javascript
+  // Example payload
+  
+  
+      "card-5678": {
+        id: "card-5678",
+        title: "Another mock title",
+        author: "Mock Author2",
+        date: "2019-04-03",
+        time: "1300"
+      }
+```

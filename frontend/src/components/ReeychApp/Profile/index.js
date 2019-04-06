@@ -1,14 +1,18 @@
 import React, { useContext } from 'react';
 
 import Avatar from './Avatar';
+import StoreContext from '../../../store/context';
 
-/*** Mock User Data */
-import { AuthContext } from '../../Authentication/AuthContext';
-/*** End Mock User Data */
 
 function Profile() {
-  const { authCtx: { data: { profile }} } = useContext(AuthContext);
-  return <Avatar {...profile} />;
+  const { state, dispatch } = useContext(StoreContext);
+  const { profile, spaces } = state
+  
+  return <Avatar 
+    profileData={profile}
+    spacesData={spaces}
+    dispatch={dispatch}
+  />;
 }
 
 export default Profile;

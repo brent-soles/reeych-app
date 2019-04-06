@@ -1,11 +1,12 @@
 import React, { useContext } from 'react';
 import { Redirect } from '@reach/router';
 
-import { AuthContext } from '../../Authentication/AuthContext';
+import SpaceContext from '../../../store/context';
 
 function ProtectedRoute(props){
-  const { authCtx: { data: { isAuthed } } } = useContext(AuthContext);
-  return isAuthed ? props.children : <Redirect to="/auth" noThrow />;
+  const { state } = useContext(SpaceContext);
+  const authenticated = state.authentication;
+  return authenticated ? props.children : <Redirect to="/auth" noThrow />;
 }
 
 export default ProtectedRoute;

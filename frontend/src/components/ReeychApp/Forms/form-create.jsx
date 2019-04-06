@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 
 import FormCard from './form-card-base';
 import TextEditor from './text-editor';
-import { CREATE_CARD } from '../../../containers/Cards/Operations';
+import { CREATE_CARD } from '../../../GraphQL/Cards/Operations';
 
 const FormCardWrapper = styled.div`
   margin: 0rem auto;

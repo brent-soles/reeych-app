@@ -12,6 +12,7 @@ defmodule ReeychBackend.Accounts.User do
 
     has_one :credential, Credential
     many_to_many :spaces, ReeychBackend.Spaces.Space, join_through: ReeychBackend.Relations.UsersSpaces
+    many_to_many :cards, ReeychBackend.Cards.Card, join_through: ReeychBackend.Relations.CardsUsers
 
     timestamps()
   end

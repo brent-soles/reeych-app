@@ -7,7 +7,9 @@ defmodule ReeychBackend.Spaces.Space do
     field :name, :string
     field :org, :string
     field :private, :boolean, default: false
+    
     many_to_many :users, ReeychBackend.Accounts.User, join_through: ReeychBackend.Relations.UsersSpaces
+    many_to_many :cards, ReeychBackend.Cards.Card, join_through: ReeychBackend.Relations.CardsSpaces
 
     timestamps()
   end

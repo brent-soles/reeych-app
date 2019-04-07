@@ -28,12 +28,15 @@ const profileReducer = (state, action) => {
 }
 
 const authenticationReducer = (state, action) => {
-  const { type, payload } = action;
+  const { type } = action;
   switch(type) {
     case 'authenticate':
       return {
         ...state,
-        authentication: payload
+        authentication: {
+          ...state.authentication,
+          authenticated: true
+        }
       }
     case 'revoke_authentication':
       return {

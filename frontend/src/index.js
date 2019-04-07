@@ -10,6 +10,7 @@ import hydrateReducerState from './store';
 import * as serviceWorker from './serviceWorker';
 
 const { reducer, seed } = hydrateReducerState();
+console.log('index seed', seed);
 function Application() {
 
   const [state, dispatch] = useReducer(reducer, seed);

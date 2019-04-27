@@ -7,6 +7,7 @@ import StoreContext from '../../../store/context';
 const DashBoardContainer = styled.div`
   h1 {
     margin: 2rem;
+    margin-top: 0px;
   }
 `;
 

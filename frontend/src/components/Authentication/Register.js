@@ -2,14 +2,13 @@ import React, { useState, useContext } from 'react';
 import { Redirect } from '@reach/router';
 
 // Custom Components
-import { AuthContext } from './AuthContext';
+import StoreContext from '../../store/context';
 import { PrimaryButton } from '../SharedComponents/Styles/StyledButtons';
 
 function Register(){
   // Get's auth context, and method to update Auth stats upon successful login
-  // Ref: src/lib/hook/useStatefulContext.js to see how ctx methods are applied
-  const { authCtx, setAuthCtx } = useContext(AuthContext);
-  const { isAuthed, id } = authCtx;
+  const { state, dispatch } = useContext(StoreContext);
+  const { authenticated } = state.authentication;
 
   // Keep tabs on current state form
   // TODO: add validation of fields
@@ -24,8 +23,8 @@ function Register(){
   // If user has been authenticated redirect to app
   // app/* is a protected route
   // If user has not been authenticated yet, keep showing form
-  if(isAuthed){
-    return <Redirect to={`app/${id}`} noThrow />
+  if(authenticated){
+    return <Redirect to={`app/spaces/new`} noThrow />
   } else {
     const { first, last, email, passwd, passwdVerify } = formData;
     return (
@@ -35,7 +34,7 @@ function Register(){
 
             // Upon successful login, set auth flag to true and udpate ID
             // Id is used to verifiy upon further requests
-            setAuthCtx({...authCtx, isAuthed: true });
+            dispatch({target: 'authentication', type: 'AUTHENTICATE'})
           } catch(err) {
             throw new Error(`We are having trouble connecting`);
           }

@@ -5,13 +5,12 @@ import styled from '@emotion/styled';
 
 const EditorWrapper = styled.div`
   background: rgba(0, 0, 0, .13);
-  border-radius: .6rem;
+  border-radius: .8rem;
 
   min-height: 20rem;
-  min-width: 30rem;
-  max-width: 100%;
+
   
-  margin: 2rem 0rem;
+  margin: .6rem;
 
   transition: .1s ease-in-out;
   
@@ -25,7 +24,7 @@ background: rgba(0, 0, 0, .09);
   flex-direction: row;
   
   button {
-    padding: 1rem;
+    padding: .75rem;
     margin: .5rem;
     border-radius: .6rem;
     width: 4.5rem;
@@ -58,14 +57,6 @@ function TextEditor({ content, onChange }) {
         <button onClick={_onBoldClick}>B</button>
         <button onClick={_onItalicClick}>I</button>
         {/* Solely for mocking purposes */}
-        <button onClick={_onBoldClick}>B</button>
-        <button onClick={_onItalicClick}>I</button>
-        <button onClick={_onBoldClick}>B</button>
-        <button onClick={_onItalicClick}>I</button>
-        <button onClick={_onBoldClick}>B</button>
-        <button onClick={_onItalicClick}>I</button>
-        <button onClick={_onBoldClick}>B</button>
-        <button onClick={_onItalicClick}>I</button>
         <button onClick={_onBoldClick}>B</button>
         <button onClick={_onItalicClick}>I</button>
       </BtnControlBar>

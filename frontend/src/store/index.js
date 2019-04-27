@@ -30,7 +30,7 @@ const profileReducer = (state, action) => {
 const authenticationReducer = (state, action) => {
   const { type } = action;
   switch(type) {
-    case 'authenticate':
+    case 'AUTHENTICATE':
       return {
         ...state,
         authentication: {
@@ -38,7 +38,7 @@ const authenticationReducer = (state, action) => {
           authenticated: true
         }
       }
-    case 'revoke_authentication':
+    case 'REVOKE':
       return {
         ...state,
         authentication: null

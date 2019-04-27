@@ -20,7 +20,7 @@ function Login(){
   });
 
   const authenticate = () => {
-    dispatch({target: 'authentication', type: 'authenticate'})
+    dispatch({target: 'authentication', type: 'AUTHENTICATE'})
   }
 
   // If user has been authenticated redirect to app

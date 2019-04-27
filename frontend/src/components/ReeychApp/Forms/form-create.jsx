@@ -9,24 +9,44 @@ import { CREATE_CARD } from '../../../GraphQL/Cards/Operations';
 const FormCardWrapper = styled.div`
   margin: 0rem auto;
   min-width: 30rem;
-  max-width: 60rem;
+  max-width: 55rem;
 
-  border-radius: .4rem;
+  border-radius: .8rem;
   padding: .6rem;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, .3);
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, .3);
 
   * {
     font-size: 1.5rem;
+    
   }
 
   input {
+    border-radius: .8rem;
     margin: .6rem;
-    padding: .6rem;
+    padding: .8rem;
     border: none;
+    outline: none;
+  }
+
+  select {
+    padding: .8rem;
+    border: none;
+    height: 3.5rem;
+    outline: none;
+    margin: .6rem;
+  }
+
+  select:hover {
+    background: rgba(0, 0, 0, .1);
+  }
+
+  input:hover {
+    background: rgba(0, 0, 0, .1);
   }
 
   input:focus {
     background: rgba(0, 0, 0, .2);
+    box-shadow: 0px 0px 5px 0.5px blue;
   }
 
   #create-card-main {
@@ -92,7 +112,7 @@ function FormCreateCard(){
                   setFormState({...formState, "content": editorState})
                 }}
               />
-              <button type="submit">Submit</button>
+              <button type="submit">+</button>
             </>
           )}
         }

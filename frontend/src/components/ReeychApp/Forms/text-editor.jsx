@@ -1,5 +1,5 @@
 import React from 'react';
-import {Editor, RichUtils } from 'draft-js';
+import {Editor, EditorState, RichUtils } from 'draft-js';
 
 import styled from '@emotion/styled';
 
@@ -32,7 +32,7 @@ background: rgba(0, 0, 0, .09);
 `;
 
 function TextEditor({ content, onChange }) {
-  // Set bold in draf editor
+  // Set bold in draft editor
   const _onBoldClick = () => {
     onChange(RichUtils.toggleInlineStyle(content, "BOLD"));
   };
@@ -63,7 +63,7 @@ function TextEditor({ content, onChange }) {
       <Editor
         spellCheck
         stripPastedStyles
-        editorState={content}
+        editorState={content || EditorState.createEmpty()}
         onChange={onChange}
         handleKeyCommand={handleKeyCommand}
       />

@@ -1,10 +1,10 @@
-import React from 'react';
-import { EditorState } from 'draft-js';
+import React, { useContext } from 'react';
 import styled from '@emotion/styled';
 
 import FormCard from './form-card-base';
 import TextEditor from './text-editor';
 import { CREATE_CARD } from '../../../GraphQL/Cards/Operations';
+import StoreContext from '../../../store/context'
 
 const FormCardWrapper = styled.div`
   margin: 0rem auto;
@@ -56,6 +56,9 @@ const FormCardWrapper = styled.div`
 `
 
 function FormCreateCard(){
+  const { state, dispatch } = useContext(StoreContext);
+  const spaceId = state.spaces.current;
+  const currentEditingState = state.editor[spaceId];
 
   return (
     <FormCardWrapper>
@@ -65,51 +68,50 @@ function FormCreateCard(){
         }}
         mutation={CREATE_CARD} 
         initialState={{ 
-          heading: 'ehy', 
-          date: '2019-04-01',
-          author: 'Mock Author',
-          content: EditorState.createEmpty(),
-          data: {
-            authorsList: [
-              'Mock Auhtor',
-              'Another Author',
-              'Third Author'
-            ]
-          }
-      }}>
-        {({ formState, setFormState }) => {
+          ...currentEditingState,
+        }}
+        contentToStr
+      >
+        {({ editorState }) => {
           const handleChange = ({ target }) => {
-            setFormState({...formState, [target.name]: target.value});
+            dispatch({ 
+              target: 'editor',
+              type: 'UPDATE_EDITOR',
+              payload: {
+                spaceId,
+                data: { ...editorState, [target.name]: target.value }
+              }
+            });
           }
           return (
             <>
               <input 
-                name='heading'
+                name='title'
                 type='text'
-                value={formState.heading}
+                value={editorState.title}
                 onChange={handleChange} 
               />
               <input 
                 name='date'
                 type='date'
-                value={formState.date}
+                value={editorState.date}
                 onChange={handleChange}
               />
               <select
                 name='author'
-                value={formState.author}
+                value={editorState.author}
                 onChange={handleChange}
               >
-                {formState.data.authorsList.map((el, i) => (
+                {editorState.data.authorsList.map((el, i) => (
                   <option key={i}>{el}</option>
                 ))}
               </select>
               <TextEditor
                 id={`create-card-main`}
                 name='content'
-                content={formState.content}
-                onChange={(editorState) => {
-                  setFormState({...formState, "content": editorState})
+                content={editorState.content}
+                onChange={(newEditorState) => {
+                  handleChange({ target: { name: "content", value: newEditorState } })
                 }}
               />
               <button type="submit">+</button>

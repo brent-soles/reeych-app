@@ -1,11 +1,13 @@
 /**
  * Render prop for form card
  */
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import { graphql } from 'react-apollo';
 import styled from '@emotion/styled';
-import { convertToRaw } from 'draft-js';
+import { EditorState, convertToRaw } from 'draft-js';
 import { funnlAsync } from 'funnl';
+
+import StoreContext from '../../../store/context'
 
 const CardContainerGrid = styled.div`
     display: grid;
@@ -14,7 +16,7 @@ const CardContainerGrid = styled.div`
 
 // FormCard only renders once, then the component produced from
 // gqlEnhance is the component that re-renders upon state change
-function FormCard({mutation, initialState, children}){
+function FormCard({ mutation, contentToStr, children }) { 
   
   // graphql funciton returns a function, to which mutation
   // function is passed.
@@ -29,29 +31,41 @@ function FormCard({mutation, initialState, children}){
   // mutate is passed from gqlEnhance, children is from FormCard props
   // The component re
   const Component = gqlEnhance(({ mutate }) => {
-    const [formState, setFormState] = useState(initialState);
+    const { state, dispatch } = useContext(StoreContext);
+    
+    const currentSpaceId = state.spaces.current;
+    const currentEditorState = state.editor[currentSpaceId];
+    // If the object is null, we want to make empty,
+    // Otherwise, data will be in correct format
+    if ( Object.entries(currentEditorState.content).length === 0 ) {
+      currentEditorState.content = EditorState.createEmpty()
+    }
+
     return (
       <form
         onSubmit={async (event) => {
           event.preventDefault();
-          
-          const toString = true;
+          console.log("SUBMITTED");
           await funnlAsync([
-            formState.content.getCurrentContent(),
+            currentEditorState.content.getCurrentContent(),
             convertToRaw,
             (r) => ({
               variables: {
-                ...formState,
-                content: toString ? JSON.stringify(r) : r
+                ...currentEditorState,
+                content: contentToStr ? JSON.stringify(r) : r
               }
             }),
-            (r) => console.log(`Sending:`, r)
+            (r) => console.log(`Sending:`, r),
             // mutate // Send data to backend
+            () => {
+              console.log("RESETTING")
+              dispatch({ target: 'editor', type: 'RESET_EDITOR', payload: { spaceId: currentSpaceId }})
+            }
           ])
         }}
       >
         <CardContainerGrid>
-          {children({ formState, setFormState })}
+          {children({ editorState: currentEditorState, setEditorState: dispatch })}
         </CardContainerGrid>
       </form>
     )}

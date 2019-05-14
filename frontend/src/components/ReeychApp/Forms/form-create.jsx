@@ -4,7 +4,6 @@ import styled from '@emotion/styled';
 import FormCard from './form-card-base';
 import TextEditor from './text-editor';
 import { CREATE_CARD } from '../../../GraphQL/Cards/Operations';
-import StoreContext from '../../../store/context'
 
 const FormCardWrapper = styled.div`
   margin: 0rem auto;
@@ -56,10 +55,6 @@ const FormCardWrapper = styled.div`
 `
 
 function FormCreateCard(){
-  const { state, dispatch } = useContext(StoreContext);
-  const spaceId = state.spaces.current;
-  const currentEditingState = state.editor[spaceId];
-
   return (
     <FormCardWrapper>
       <FormCard
@@ -67,21 +62,14 @@ function FormCreateCard(){
           width: '500px'
         }}
         mutation={CREATE_CARD} 
-        initialState={{ 
-          ...currentEditingState,
-        }}
         contentToStr
       >
-        {({ editorState }) => {
+        {({ editorState, setEditorState, props }) => {
           const handleChange = ({ target }) => {
-            dispatch({ 
-              target: 'editor',
-              type: 'UPDATE_EDITOR',
-              payload: {
-                spaceId,
-                data: { ...editorState, [target.name]: target.value }
-              }
-            });
+            setEditorState({
+              ...editorState,
+              [target.name]: target.value
+            })
           }
           return (
             <>
@@ -90,6 +78,7 @@ function FormCreateCard(){
                 type='text'
                 value={editorState.title}
                 onChange={handleChange} 
+                {...props}
               />
               <input 
                 name='date'

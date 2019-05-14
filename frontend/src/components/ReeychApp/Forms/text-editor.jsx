@@ -34,6 +34,7 @@ background: rgba(0, 0, 0, .09);
 function TextEditor({ content, onChange }) {
   // Set bold in draft editor
   const _onBoldClick = () => {
+    console.log('Setting bold');
     onChange(RichUtils.toggleInlineStyle(content, "BOLD"));
   };
 
@@ -54,11 +55,7 @@ function TextEditor({ content, onChange }) {
   return (
     <EditorWrapper id="editorWrapper">
       <BtnControlBar>
-        <button onClick={_onBoldClick}>B</button>
-        <button onClick={_onItalicClick}>I</button>
-        {/* Solely for mocking purposes */}
-        <button onClick={_onBoldClick}>B</button>
-        <button onClick={_onItalicClick}>I</button>
+        <button type="button" onClick={_onBoldClick}>B</button>
       </BtnControlBar>
       <Editor
         spellCheck

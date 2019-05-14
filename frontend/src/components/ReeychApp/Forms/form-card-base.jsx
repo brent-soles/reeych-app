@@ -1,7 +1,7 @@
 /**
  * Render prop for form card
  */
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { graphql } from 'react-apollo';
 import styled from '@emotion/styled';
 import { EditorState, convertToRaw } from 'draft-js';
@@ -31,21 +31,50 @@ function FormCard({ mutation, contentToStr, children }) {
   // mutate is passed from gqlEnhance, children is from FormCard props
   // The component re
   const Component = gqlEnhance(({ mutate }) => {
+
     const { state, dispatch } = useContext(StoreContext);
-    
     const currentSpaceId = state.spaces.current;
     const currentEditorState = state.editor[currentSpaceId];
+
     // If the object is null, we want to make empty,
     // Otherwise, data will be in correct format
     if ( Object.entries(currentEditorState.content).length === 0 ) {
       currentEditorState.content = EditorState.createEmpty()
     }
 
+    const [editorState, setEditorState] = useState(currentEditorState)
+    const [lastKeyPressTab, setLastKeyPressTab] = useState(false);
+
+    const updateStoreOnBlur = () => {
+      if(!lastKeyPressTab) { 
+        dispatch({ 
+          target: 'editor', 
+          type: 'UPDATE_EDITOR',
+          payload: {
+            spaceId: currentSpaceId,
+            data: editorState
+          }
+        })
+      }
+    }
+
+    const resetLastKeyPress = () => {
+      setLastKeyPressTab(false);
+    }
+
+    const captureLastKeyPress = (e) => {
+      console.log('e.key', e.key);
+      if(e.key === 'Tab'){
+        setLastKeyPressTab(true);
+      } else {
+        resetLastKeyPress();
+      }
+    }
+
     return (
       <form
         onSubmit={async (event) => {
           event.preventDefault();
-          console.log("SUBMITTED");
           await funnlAsync([
             currentEditorState.content.getCurrentContent(),
             convertToRaw,
@@ -65,7 +94,16 @@ function FormCard({ mutation, contentToStr, children }) {
         }}
       >
         <CardContainerGrid>
-          {children({ editorState: currentEditorState, setEditorState: dispatch })}
+          {children({ 
+            spaceId: currentSpaceId,
+            editorState: editorState,
+            setEditorState: setEditorState,
+            props: {
+              onBlur: updateStoreOnBlur,
+              onKeyDown: captureLastKeyPress,
+              onFocus: resetLastKeyPress
+            }
+          })}
         </CardContainerGrid>
       </form>
     )}

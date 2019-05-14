@@ -9,7 +9,7 @@ import StoreContext from '../store/context';
 
 function App(){
   const { state } = useContext(StoreContext);
-  console.log('App state:', state);
+  console.log('App.js:', state);
   const { authenticated } = state.authentication;
   const { spaces } = state.profile;
 

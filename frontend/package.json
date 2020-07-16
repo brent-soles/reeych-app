@@ -14,7 +14,7 @@
     "funnl": "^0.0.8",
     "graphql": "^14.0.2",
     "graphql-tag": "^2.10.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.19",
     "prop-types": "^15.6.2",
     "react": "16.8.0",
     "react-apollo": "^2.3.3",
